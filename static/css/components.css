@@ -1,0 +1,85 @@
+/* ==========================================================================
+   YugKrit - Reusable components
+   ========================================================================== */
+
+/* --- Multi-step form --- */
+.stepper { display: flex; align-items: center; margin-bottom: 30px; }
+.stepper-step { display: flex; align-items: center; flex: 1; }
+.stepper-step:last-child { flex: 0; }
+.stepper-circle { width: 34px; height: 34px; border-radius: 50%; background: var(--ink-100); color: var(--ink-500); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.stepper-step.active .stepper-circle { background: var(--color-primary); color: #fff; }
+.stepper-step.complete .stepper-circle { background: var(--color-success); color: #fff; }
+.stepper-label { margin-left: 10px; font-size: 13px; font-weight: 600; color: var(--ink-500); white-space: nowrap; }
+.stepper-step.active .stepper-label { color: var(--ink-900); }
+.stepper-line { flex: 1; height: 2px; background: var(--border-color); margin: 0 12px; }
+
+.form-step { display: none; }
+.form-step.active { display: block; }
+
+.auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--surface-muted); padding: 30px 16px; }
+.auth-card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: min(920px, 100%); max-width: 100%; padding: 40px 48px; }
+.auth-card.wide { width: min(1100px, 100%); }
+.auth-logo { text-align: center; margin-bottom: 22px; }
+.auth-logo-image { width: 96px; height: 96px; object-fit: contain; display: block; margin: 0 auto 10px; }
+.auth-links { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--ink-500); }
+.auth-help { color: var(--ink-500); font-size: 14px; }
+.otp-resend-form { margin-top: 14px; }
+.footer-brand { display: flex; align-items: center; gap: 8px; }
+.footer-brand img { width: 34px; height: 34px; object-fit: contain; }
+.location-autofill { display: flex; align-items: center; gap: 10px; margin: 0 0 14px; font-size: 12px; color: var(--ink-500); }
+.location-autofill button { white-space: nowrap; }
+.location-autofill span { line-height: 1.4; }
+
+.login-mode-tabs { display: flex; border: 1px solid var(--border-color); border-radius: var(--radius-sm); overflow: hidden; margin-bottom: 20px; }
+.login-mode-tab { flex: 1; text-align: center; padding: 10px; font-size: 13.5px; font-weight: 600; color: var(--ink-500); background: var(--surface-muted); }
+.login-mode-tab.active { background: var(--color-primary); color: #fff; }
+a.login-mode-tab:hover { color: var(--color-primary); }
+.role-select-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.role-select-card { border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; text-align: center; transition: all .15s ease; position: relative; }
+.role-select-card:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.role-select-card i { font-size: 26px; color: var(--color-primary); margin-bottom: 10px; }
+.role-select-card.staff-card { grid-column: 1 / -1; border-color: var(--color-accent); background: var(--color-accent-light); display: flex; align-items: center; gap: 18px; text-align: left; padding: 18px 22px; }
+.role-select-card.staff-card i { font-size: 30px; color: var(--color-accent); margin-bottom: 0; flex-shrink: 0; }
+.role-select-card.staff-card .staff-card-body { flex: 1; }
+.role-select-card.staff-card h4 { margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.role-select-card.staff-card p { margin-bottom: 0; }
+.staff-badge { font-size: 10px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; background: var(--color-accent); color: #fff; padding: 2px 8px; border-radius: 999px; }
+.role-select-card.staff-card .btn { width: auto; flex-shrink: 0; }
+.role-select-card h4 { font-size: 15px; margin-bottom: 6px; }
+.role-select-card p { font-size: 12.5px; color: var(--ink-500); margin-bottom: 14px; }
+
+.file-drop {
+  border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 26px; text-align: center;
+  cursor: pointer; transition: border-color .15s ease; background: var(--surface-muted);
+}
+.file-drop:hover, .file-drop.dragover { border-color: var(--color-primary); background: var(--color-primary-light); }
+.file-drop i { font-size: 22px; color: var(--ink-500); margin-bottom: 8px; }
+.file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.file-item { display: flex; align-items: center; justify-content: space-between; background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 13px; }
+.file-item .file-remove { color: var(--color-danger); cursor: pointer; background: none; border: none; }
+
+/* --- Innovation growth profile / student --- */
+.profile-hero { background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); border-radius: var(--radius-lg); padding: 34px; color: #fff; margin-bottom: 24px; }
+.profile-hero h1 { color: #fff; }
+.profile-hero p { color: rgba(255,255,255,.8); }
+
+.growth-stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px; margin: 20px 0; }
+.growth-stat { background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; text-align: center; }
+.growth-stat .num { font-family: var(--font-display); font-size: 22px; font-weight: 700; color: var(--color-primary); }
+.growth-stat .lab { font-size: 11.5px; color: var(--ink-500); margin-top: 4px; }
+
+.achievement-badge { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 16px; }
+.achievement-badge .icon { width: 40px; height: 40px; border-radius: 10px; background: var(--color-accent-light); color: var(--color-accent); display: flex; align-items: center; justify-content: center; font-size: 17px; flex-shrink: 0; }
+
+.certificate-card { border: 2px solid var(--color-primary); border-radius: var(--radius-lg); padding: 34px; text-align: center; background: linear-gradient(180deg, #fff, var(--color-primary-light)); }
+.certificate-card .cert-seal { width: 70px; height: 70px; border-radius: 50%; background: var(--color-accent); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+.certificate-card h2 { font-family: var(--font-display); }
+.certificate-id { font-family: monospace; background: var(--ink-100); padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+
+/* --- Map --- */
+.map-container { height: 520px; border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--border-color); }
+.map-container.small { height: 260px; }
+.leaflet-popup-content h4 { margin-bottom: 4px; }
+
+/* --- Chart card --- */
+.chart-card canvas { max-height: 300px; }
