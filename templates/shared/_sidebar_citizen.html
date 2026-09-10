@@ -1,0 +1,5 @@
+<a href="{{ url_for('citizen.overview') }}" class="{{ 'active' if request.endpoint=='citizen.overview' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('citizen.post_problem') }}" class="{{ 'active' if request.endpoint=='citizen.post_problem' }}"><i class="fa-solid fa-square-plus"></i> Post a Problem</a>
+<a href="{{ url_for('citizen.my_problems') }}" class="{{ 'active' if request.endpoint=='citizen.my_problems' }}"><i class="fa-solid fa-list"></i> My Problems</a>
+<a href="{{ url_for('citizen.problems') }}" class="{{ 'active' if request.endpoint in ['citizen.problems','citizen.problem_detail'] }}"><i class="fa-solid fa-magnifying-glass"></i> Browse Problems</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>

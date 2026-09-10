@@ -1,0 +1,27 @@
+{% extends "university/_base.html" %}
+{% block title %}Create Project — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('university.challenge_detail', challenge_id=challenge.id) }}">{{ challenge.title }}</a> / New Project</div>
+<div class="page-header"><div><h1>Create Project</h1><p>Turn this challenge into an actionable project for your student team.</p></div></div>
+
+<div class="card card-body" style="max-width:700px;">
+  <form method="post">
+    <div class="form-group"><label>Project Name *</label><input type="text" name="name" required value="Smart {{ challenge.category.name if challenge.category else 'Solution' }} Initiative"></div>
+    <div class="form-group"><label>Objective</label><textarea name="objective" placeholder="What is this project trying to achieve?"></textarea></div>
+    <div class="form-group"><label>Description</label><textarea name="description"></textarea></div>
+    <div class="form-group"><label>Expected Outcome</label><textarea name="expected_outcome"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Start Date</label><input type="date" name="start_date"></div>
+      <div class="form-group"><label>Expected Completion</label><input type="date" name="expected_completion"></div>
+    </div>
+    <div class="form-group">
+      <label>Faculty Mentor</label>
+      <select name="faculty_mentor_id">
+        <option value="">Assign later</option>
+        {% for f in faculty_list %}<option value="{{ f.id }}">{{ f.user.full_name }} — {{ f.department }}</option>{% endfor %}
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block btn-lg">Create Project</button>
+  </form>
+</div>
+{% endblock %}

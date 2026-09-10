@@ -1,0 +1,111 @@
+{% extends "government/_base.html" %}
+{% block title %}{{ challenge.title }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('government.challenges') }}">Challenges</a> / {{ challenge.challenge_code }}</div>
+<div class="page-header">
+  <div><h1>{{ challenge.title }}</h1><p>{{ challenge.category.name if challenge.category else '—' }} · {{ challenge.subcategory or '' }}</p></div>
+  <span class="badge {{ 'badge-danger' if challenge.priority_score>=70 else 'badge-warning' }}" style="font-size:14px;padding:8px 16px;">Priority {{ challenge.priority_score }}/100</span>
+</div>
+
+<div class="grid-2">
+  <div>
+    <div class="card card-body">
+      <h3>Description</h3>
+      <p>{{ challenge.description }}</p>
+      <div class="detail-list">
+        <div class="row"><span class="label">Affected Population</span><span class="value">{{ challenge.affected_population }}</span></div>
+        <div class="row"><span class="label">Urgency</span><span class="value">{{ challenge.urgency }}</span></div>
+        <div class="row"><span class="label">Current Situation</span><span class="value">{{ challenge.current_situation or '—' }}</span></div>
+        <div class="row"><span class="label">Location</span><span class="value">{{ challenge.location.address if challenge.location }}, {{ challenge.location.district if challenge.location }}</span></div>
+        <div class="row"><span class="label">Problem Owner</span><span class="value">{{ challenge.problem_owner_org.name if challenge.problem_owner_org else '—' }}</span></div>
+        <div class="row"><span class="label">Submitted By</span><span class="value">{{ challenge.submitter_name() }}</span></div>
+        <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-neutral">{{ challenge.status }}</span></span></div>
+      </div>
+    </div>
+
+    {% if challenge.location and challenge.location.latitude %}
+    <div class="card card-body" style="margin-top:20px;">
+      <h3>Location</h3>
+      <div id="challenge-map" class="map-container small"
+        data-locations='[{"title": {{ challenge.title|tojson }}, "lat": {{ challenge.location.latitude }}, "lng": {{ challenge.location.longitude }}, "priority": {{ challenge.priority_score }}, "status": {{ challenge.status|tojson }}}]'></div>
+    </div>
+    {% endif %}
+
+    {% if challenge.evidence_items %}
+    <div class="card card-body" style="margin-top:20px;">
+      <h3>Evidence ({{ challenge.evidence_items|length }})</h3>
+      {% for e in challenge.evidence_items %}
+        <div class="file-item"><span><i class="fa-solid fa-paperclip"></i> {{ e.file_name }}</span><span class="badge badge-neutral">{{ e.evidence_type }}</span></div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if challenge.ai_analysis %}
+    <div class="card card-body" style="margin-top:20px;border-color:var(--color-primary);">
+      <h3><i class="fa-solid fa-robot" style="color:var(--color-primary);"></i> AI Recommendation <span class="badge badge-info">Human Review Required</span></h3>
+      <div class="detail-list">
+        <div class="row"><span class="label">Suggested Category</span><span class="value">{{ challenge.ai_analysis.suggested_category }}</span></div>
+        <div class="row"><span class="label">Priority Score</span><span class="value">{{ challenge.ai_analysis.priority_score }}/100</span></div>
+        <div class="row"><span class="label">Suggested Skills</span><span class="value">{{ challenge.ai_analysis.suggested_skills }}</span></div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card card-body" style="margin-top:20px;">
+      <h3>Audit History</h3>
+      {% for a in audit %}
+        <div style="font-size:13px;padding:8px 0;border-bottom:1px dashed var(--border-color);">
+          <strong>{{ a.action }}</strong> by {{ a.role_name }} — {{ a.timestamp.strftime('%d %b %Y, %I:%M %p') }}
+          {% if a.reason %}<br><span style="color:var(--ink-500);">{{ a.reason }}</span>{% endif %}
+        </div>
+      {% else %}
+        <p style="color:var(--ink-500);font-size:13px;">No actions recorded yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div>
+    <div class="card card-body">
+      <h3>Government Actions</h3>
+      {% if challenge.status == 'SUBMITTED' %}
+      <form method="post" action="{{ url_for('government.verify_challenge', challenge_id=challenge.id) }}" style="margin-bottom:14px;">
+        <div class="form-group"><label>Reason / Notes</label><textarea name="reason" placeholder="Verification notes..."></textarea></div>
+        <div style="display:flex;gap:10px;">
+          <button type="submit" name="decision" value="approve" class="btn btn-success btn-block">Verify</button>
+          <button type="submit" name="decision" value="reject" class="btn btn-danger btn-block">Reject</button>
+        </div>
+      </form>
+      {% endif %}
+
+      {% if challenge.status == 'VERIFIED' %}
+      <form method="post" action="{{ url_for('government.assign_challenge', challenge_id=challenge.id) }}">
+        <div class="form-group">
+          <label>Assign to University</label>
+          <select name="university_id" required>
+            <option value="">Select university</option>
+            {% for u in universities %}<option value="{{ u.id }}">{{ u.organization.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Assign University</button>
+      </form>
+      {% endif %}
+
+      {% if challenge.status not in ['SUBMITTED', 'VERIFIED'] %}
+        <p style="font-size:13px;color:var(--ink-500);">This challenge has already progressed past the assignment stage.</p>
+      {% endif %}
+    </div>
+
+    {% if challenge.projects %}
+    <div class="card card-body" style="margin-top:20px;">
+      <h3>Linked Project</h3>
+      {% for p in challenge.projects %}
+        <div style="padding:8px 0;">
+          <strong>{{ p.name }}</strong><br>
+          <span class="badge badge-neutral">{{ p.status }}</span>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

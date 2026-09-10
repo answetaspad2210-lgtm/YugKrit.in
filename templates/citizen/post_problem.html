@@ -1,0 +1,119 @@
+{% extends "citizen/_base.html" %}
+{% block title %}Post a Problem — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Post a Problem</h1><p>Describe the issue affecting your community. It will be reviewed by the Government IT Cell.</p></div></div>
+
+<div class="card card-body" style="max-width:760px;">
+<form method="post" enctype="multipart/form-data">
+  <div class="form-group"><label>Title *</label><input type="text" name="title" required></div>
+  <div class="form-group"><label>Description *</label><textarea name="description" required></textarea></div>
+  <div class="form-row">
+    <div class="form-group"><label for="problem-category">Category *</label>
+      <select name="category" id="problem-category" required>
+        <option value="">Choose a category</option>
+        {% for category in categories %}<option value="{{ category.name }}">{{ category.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="form-group"><label for="problem-subcategory">Subcategory *</label>
+      <select name="subcategory" id="problem-subcategory" required disabled>
+        <option value="">Choose a category first</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group"><label for="problem-state">State *</label>
+      <select name="state" id="problem-state" required>
+        <option value="">Choose a state</option><option value="Punjab">Punjab</option><option value="Jharkhand">Jharkhand</option>
+      </select>
+    </div>
+    <div class="form-group"><label for="problem-district">District *</label>
+      <select name="district" id="problem-district" required disabled>
+        <option value="">Choose a state first</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group"><label for="problem-address">Address *</label><input type="text" id="problem-address" name="address" required></div>
+  <div class="form-group">
+    <label>Pin the exact location on the map</label>
+    <div id="location-picker" class="map-container small"></div>
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+  </div>
+
+  <div class="form-group">
+    <label for="affected-population">How many people are affected? <output id="affected-population-value" for="affected-population">1</output> *</label>
+    <input type="range" id="affected-population" name="affected_population" min="1" max="100000" step="1" value="1" list="affected-population-steps" required>
+    <datalist id="affected-population-steps">
+      <option value="100"></option><option value="1000"></option><option value="10000"></option><option value="50000"></option><option value="100000"></option>
+    </datalist>
+    <small style="color:var(--ink-500);">Drag to estimate the number of people impacted.</small>
+  </div>
+  <div class="form-group"><label>Urgency *</label>
+    <select name="urgency" required>
+      <option value="LOW">Low</option><option value="MEDIUM" selected>Medium</option>
+      <option value="HIGH">High</option><option value="CRITICAL">Critical</option>
+    </select>
+  </div>
+  <div class="form-group"><label>Current Situation</label><textarea name="current_situation"></textarea></div>
+
+  <div class="form-group">
+    <label>Photos / Videos / Documents (optional)</label>
+    <div class="file-drop" data-file-drop="evidence-input" data-file-list="evidence-list">
+      <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag files (PDF, JPG, PNG, MP4)</p>
+    </div>
+    <input type="file" id="evidence-input" name="evidence" accept=".pdf,.jpg,.jpeg,.png,.mp4" multiple hidden>
+    <div class="file-list" id="evidence-list"></div>
+  </div>
+
+  <button type="submit" class="btn btn-accent btn-block btn-lg">Submit Problem</button>
+</form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+  const problemSubcategories = {
+    "Urban Infrastructure": ["Roads and potholes", "Streetlights", "Public transport", "Drainage"],
+    "Water & Sanitation": ["Drinking water", "Waterlogging", "Sewage", "Public toilets"],
+    "Environment & Waste Management": ["Garbage collection", "Air pollution", "Water pollution", "Green spaces"],
+    "Public Health": ["Primary healthcare", "Medicines", "Sanitation-related illness", "Mental health"],
+    "Education": ["School facilities", "Digital access", "Teacher shortage", "Adult literacy"],
+    "Energy": ["Power supply", "Solar energy", "Public lighting", "Clean cooking"],
+    "Public Safety": ["Traffic safety", "Women and child safety", "Emergency response", "Fire safety"],
+    "Housing & Homelessness": ["Affordable housing", "Homelessness", "Rental support", "Basic services"],
+    "Transportation & Mobility": ["Public transport", "Road safety", "Pedestrian access", "Parking"],
+    "Digital Access": ["Internet access", "Digital literacy", "Online services", "Connectivity"],
+    "Agriculture & Livelihoods": ["Farm support", "Irrigation", "Local employment", "Markets"],
+    "Women & Child Safety": ["Child protection", "Women safety", "Domestic violence support", "Nutrition"],
+    "Disability & Accessibility": ["Accessible buildings", "Assistive devices", "Inclusive transport", "Signage"],
+    "Community Services": ["Community centres", "Public spaces", "Elderly care", "Civic services"],
+    "General Societal Challenge": ["Accessibility", "Livelihoods", "Housing", "Other"]
+  };
+  const stateDistricts = {
+    Punjab: ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Malerkotla", "Mansa", "Moga", "Sri Muktsar Sahib", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar", "Sangrur", "Shahid Bhagat Singh Nagar", "Tarn Taran"],
+    Jharkhand: ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela-Kharsawan", "Simdega", "West Singhbhum"]
+  };
+  const categoryField = document.getElementById("problem-category");
+  const subcategoryField = document.getElementById("problem-subcategory");
+  const stateField = document.getElementById("problem-state");
+  const districtField = document.getElementById("problem-district");
+  const populationField = document.getElementById("affected-population");
+  const populationValue = document.getElementById("affected-population-value");
+  categoryField.addEventListener("change", () => {
+    const options = problemSubcategories[categoryField.value] || [];
+    subcategoryField.innerHTML = '<option value="">Choose a subcategory</option>' +
+      options.map(option => `<option value="${option}">${option}</option>`).join("");
+    subcategoryField.disabled = options.length === 0;
+  });
+  stateField.addEventListener("change", () => {
+    const options = stateDistricts[stateField.value] || [];
+    districtField.innerHTML = '<option value="">Choose a district</option>' +
+      options.map(option => `<option value="${option}">${option}</option>`).join("");
+    districtField.disabled = options.length === 0;
+  });
+  populationField.addEventListener("input", () => {
+    populationValue.textContent = Number(populationField.value).toLocaleString("en-IN");
+  });
+</script>
+{% endblock %}

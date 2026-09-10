@@ -1,0 +1,29 @@
+{% extends "citizen/_base.html" %}
+{% block title %}My Dashboard — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div><h1>Welcome, {{ current_user.full_name.split(' ')[0] }}</h1><p>Post real problems in your area and track them through to a verified solution.</p></div>
+  <a href="{{ url_for('citizen.post_problem') }}" class="btn btn-primary"><i class="fa-solid fa-square-plus"></i> Post a Problem</a>
+</div>
+
+<div class="stat-cards">
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-primary-light);color:var(--color-primary);"><i class="fa-solid fa-square-plus"></i></div><div><div class="stat-card-value">{{ stats.posted }}</div><div class="stat-card-label">Problems Posted</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-success-light);color:var(--color-success);"><i class="fa-solid fa-circle-check"></i></div><div><div class="stat-card-value">{{ stats.verified }}</div><div class="stat-card-label">Verified</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-info-light);color:var(--color-info);"><i class="fa-solid fa-diagram-project"></i></div><div><div class="stat-card-value">{{ stats.in_progress }}</div><div class="stat-card-label">In Progress</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-accent-light);color:var(--color-accent);"><i class="fa-solid fa-flag-checkered"></i></div><div><div class="stat-card-value">{{ stats.resolved }}</div><div class="stat-card-label">Resolved</div></div></div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h3 style="margin:0;font-size:16px;">My Recent Problems</h3><a href="{{ url_for('citizen.my_problems') }}" class="btn btn-outline btn-sm">View All</a></div>
+  <div style="padding:6px 0;">
+    {% for c in my_challenges %}
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border-color);">
+      <div><strong style="font-size:13.5px;">{{ c.title }}</strong><br><span style="font-size:12px;color:var(--ink-500);">{{ c.category.name if c.category else '' }}</span></div>
+      <span class="badge badge-neutral">{{ c.status }}</span>
+    </div>
+    {% else %}
+    <div class="empty-state"><i class="fa-solid fa-inbox"></i>You haven't posted any problems yet.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

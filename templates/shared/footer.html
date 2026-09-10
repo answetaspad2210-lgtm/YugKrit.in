@@ -1,0 +1,33 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4 class="footer-brand"><img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo"> <span>YugKrit</span></h4>
+        <p style="font-size:13px;max-width:280px;">Connecting Government, Universities, ULBs/NGOs and Students to
+          turn real societal problems into measurable, verified solutions.</p>
+      </div>
+      <div>
+        <h4>Platform</h4>
+        <a href="{{ url_for('public.how_it_works') }}" style="display:block;margin-bottom:8px;">How It Works</a>
+        <a href="{{ url_for('public.explore_challenges') }}" style="display:block;margin-bottom:8px;">Explore Challenges</a>
+        <a href="{{ url_for('public.impact') }}" style="display:block;margin-bottom:8px;">Impact</a>
+      </div>
+      <div>
+        <h4>Get Involved</h4>
+        <a href="{{ url_for('auth.register_university') }}" style="display:block;margin-bottom:8px;">Register University</a>
+        <a href="{{ url_for('auth.register_ulb') }}" style="display:block;margin-bottom:8px;">Register ULB / NGO</a>
+        <a href="{{ url_for('auth.register_student') }}" style="display:block;margin-bottom:8px;">Join as Student</a>
+        <a href="{{ url_for('auth.register_citizen') }}" style="display:block;margin-bottom:8px;">Join as Citizen</a>
+      </div>
+      <div>
+        <h4>About</h4>
+        <a href="{{ url_for('public.about') }}" style="display:block;margin-bottom:8px;">About YugKrit</a>
+        <a href="{{ url_for('public.for_universities') }}" style="display:block;margin-bottom:8px;">For Universities</a>
+        <a href="{{ url_for('public.for_organizations') }}" style="display:block;margin-bottom:8px;">For Organizations</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; {{ 2026 }} YugKrit — A societal innovation & collaboration platform. Built for the Smart India Hackathon.
+    </div>
+  </div>
+</footer>

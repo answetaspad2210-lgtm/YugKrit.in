@@ -1,0 +1,122 @@
+{% extends "ulb/_base.html" %}
+{% block title %}Submit Challenge — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Submit a New Challenge</h1><p>Describe the real-world problem your community is facing.</p></div></div>
+
+<div class="card card-body" style="max-width:800px;">
+<form method="post" enctype="multipart/form-data" data-wizard>
+  <div class="stepper">
+    <div class="stepper-step active"><div class="stepper-circle">1</div><div class="stepper-label">Problem</div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step"><div class="stepper-circle">2</div><div class="stepper-label">Location</div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step"><div class="stepper-circle">3</div><div class="stepper-label">Impact</div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step"><div class="stepper-circle">4</div><div class="stepper-label">Evidence</div></div>
+    <div class="stepper-line"></div>
+    <div class="stepper-step"><div class="stepper-circle">5</div><div class="stepper-label">Review</div></div>
+  </div>
+
+  <!-- STEP 1: Problem -->
+  <div class="form-step active">
+    <div class="form-group"><label>Title *</label><input type="text" name="title" required id="rev-title"></div>
+    <div class="form-group"><label>Description *</label><textarea name="description" required id="rev-description"></textarea></div>
+    <div class="form-row">
+      <div class="form-group"><label>Category *</label>
+        <select name="category" required id="rev-category">
+          <option>Urban Infrastructure</option><option>Water & Sanitation</option>
+          <option>Environment & Waste Management</option><option>Public Health</option>
+          <option>Education</option><option>Energy</option><option>Public Safety</option>
+          <option>General Societal Challenge</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Subcategory</label><input type="text" name="subcategory" id="rev-subcategory"></div>
+    </div>
+    <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Location</button>
+  </div>
+
+  <!-- STEP 2: Location -->
+  <div class="form-step">
+    <div class="form-group"><label>Address *</label><input type="text" name="address" required id="rev-address"></div>
+    <div class="form-row">
+      <div class="form-group"><label>District *</label><input type="text" name="district" required id="rev-district"></div>
+      <div class="form-group"><label>State *</label><input type="text" name="state" required id="rev-state"></div>
+    </div>
+    <div class="form-group">
+      <label>Pin the exact location on the map</label>
+      <div id="location-picker" class="map-container small"></div>
+      <input type="hidden" name="latitude" id="latitude">
+      <input type="hidden" name="longitude" id="longitude">
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+      <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Impact</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Impact -->
+  <div class="form-step">
+    <div class="form-group"><label>Affected Population *</label><input type="number" name="affected_population" required min="1" id="rev-population"></div>
+    <div class="form-group"><label>Urgency *</label>
+      <select name="urgency" required id="rev-urgency">
+        <option value="LOW">Low</option><option value="MEDIUM" selected>Medium</option>
+        <option value="HIGH">High</option><option value="CRITICAL">Critical</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Current Situation</label><textarea name="current_situation"></textarea></div>
+    <div class="form-group"><label>Supporting Information</label><textarea name="supporting_info"></textarea></div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+      <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Evidence</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Evidence -->
+  <div class="form-step">
+    <div class="form-group">
+      <label>Photos / Videos / Documents</label>
+      <div class="file-drop" data-file-drop="evidence-input" data-file-list="evidence-list">
+        <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag files (PDF, JPG, PNG, MP4)</p>
+      </div>
+      <input type="file" id="evidence-input" name="evidence" accept=".pdf,.jpg,.jpeg,.png,.mp4" multiple hidden>
+      <div class="file-list" id="evidence-list"></div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+      <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Review</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Review -->
+  <div class="form-step">
+    <h4>Review your submission</h4>
+    <div class="detail-list" id="review-summary">
+      <div class="row"><span class="label">Title</span><span class="value" id="sum-title"></span></div>
+      <div class="row"><span class="label">Category</span><span class="value" id="sum-category"></span></div>
+      <div class="row"><span class="label">District</span><span class="value" id="sum-district"></span></div>
+      <div class="row"><span class="label">Affected Population</span><span class="value" id="sum-population"></span></div>
+      <div class="row"><span class="label">Urgency</span><span class="value" id="sum-urgency"></span></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+      <button type="submit" class="btn btn-accent btn-block">Submit Challenge</button>
+    </div>
+  </div>
+</form>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sync = () => {
+      document.getElementById("sum-title").textContent = document.getElementById("rev-title").value;
+      document.getElementById("sum-category").textContent = document.getElementById("rev-category").value;
+      document.getElementById("sum-district").textContent = document.getElementById("rev-district").value;
+      document.getElementById("sum-population").textContent = document.getElementById("rev-population").value;
+      document.getElementById("sum-urgency").textContent = document.getElementById("rev-urgency").value;
+    };
+    document.querySelectorAll("[data-wizard-next]").forEach((b) => b.addEventListener("click", sync));
+  });
+</script>
+{% endblock %}

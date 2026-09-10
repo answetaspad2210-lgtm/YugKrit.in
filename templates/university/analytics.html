@@ -1,0 +1,23 @@
+{% extends "university/_base.html" %}
+{% block title %}Analytics — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Impact & Analytics</h1><p>How your university's projects are progressing.</p></div></div>
+
+<div class="grid-2">
+  <div class="card card-body chart-card">
+    <h3>Projects by Status</h3>
+    {% set statuses = ['PLANNING','IN_PROGRESS','UNDER_REVIEW','COMPLETED','VERIFIED'] %}
+    {% set counts = [] %}
+    {% for s in statuses %}{% set _ = counts.append(projects|selectattr('status','equalto',s)|list|length) %}{% endfor %}
+    <canvas data-chart='{"type":"bar","label":"Projects","labels": {{ statuses|tojson }}, "dataset": {"data": {{ counts|tojson }}}}'></canvas>
+  </div>
+  <div class="card card-body">
+    <h3>Summary</h3>
+    <div class="detail-list">
+      <div class="row"><span class="label">Total Projects</span><span class="value">{{ projects|length }}</span></div>
+      <div class="row"><span class="label">Completed / Verified</span><span class="value">{{ projects|selectattr('status','in',['COMPLETED','VERIFIED'])|list|length }}</span></div>
+      <div class="row"><span class="label">In Progress</span><span class="value">{{ projects|selectattr('status','equalto','IN_PROGRESS')|list|length }}</span></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

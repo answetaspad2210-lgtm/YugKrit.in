@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Impact — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h1>Our Collective Impact</h1>
+      <p>Real projects, delivered by student teams, verified by government and community stakeholders.</p>
+    </div>
+
+    <div class="stat-cards" style="max-width:400px;margin:0 auto 40px;">
+      <div class="stat-card" style="grid-column:span 2;">
+        <div class="stat-card-icon" style="background:var(--color-primary-light);color:var(--color-primary);"><i class="fa-solid fa-people-group"></i></div>
+        <div><div class="stat-card-value">{{ total_people }}</div><div class="stat-card-label">People Impacted</div></div>
+      </div>
+    </div>
+
+    {% if completed %}
+    <div class="grid-3">
+      {% for p in completed %}
+      <div class="card card-body">
+        <span class="badge badge-success">{{ p.status }}</span>
+        <h4 style="margin-top:10px;">{{ p.name }}</h4>
+        <p style="font-size:13px;color:var(--ink-500);">{{ p.challenge.title }}</p>
+        <div class="detail-list" style="margin-top:10px;">
+          <div class="row"><span class="label">University</span><span class="value">{{ p.university.organization.name }}</span></div>
+          <div class="row"><span class="label">People impacted</span><span class="value">{{ p.impact.people_impacted if p.impact else 0 }}</span></div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty-state"><i class="fa-solid fa-seedling"></i>Projects in progress — verified impact stories will appear here soon.</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

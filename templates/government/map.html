@@ -1,0 +1,28 @@
+{% extends "government/_base.html" %}
+{% block title %}Geo Map — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Challenge Geo Map</h1><p>Compare location-tagged problems across participating states.</p></div></div>
+
+<form class="filters-bar" method="get">
+  <select name="state">
+    <option value="">All States</option>
+    {% for state in states %}<option value="{{ state }}" {{ 'selected' if selected_state==state }}>{{ state }}</option>{% endfor %}
+  </select>
+  <button class="btn btn-outline btn-sm" type="submit">Filter Map</button>
+</form>
+
+<div class="card card-body">
+  {% set loc_data = [] %}
+  <div id="challenge-map" class="map-container" data-state="{{ selected_state }}" data-locations='[
+    {% for l in locations %}
+      {"title": {{ l.challenge.title|tojson }}, "lat": {{ l.latitude }}, "lng": {{ l.longitude }},
+       "category": {{ (l.challenge.category.name if l.challenge.category else "")|tojson }},
+       "priority": {{ l.challenge.priority_score }}, "status": {{ l.challenge.status|tojson }},
+       "url": {{ url_for('government.challenge_detail', challenge_id=l.challenge_id)|tojson }}}{{ "," if not loop.last }}
+    {% endfor %}
+  ]'></div>
+</div>
+{% if not locations %}
+<div class="empty-state" style="margin-top:20px;"><i class="fa-solid fa-map"></i>No geo-tagged challenges yet.</div>
+{% endif %}
+{% endblock %}

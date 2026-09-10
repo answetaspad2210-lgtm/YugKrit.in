@@ -1,0 +1,23 @@
+{% extends "student/_base.html" %}
+{% block title %}My Projects — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>My Projects</h1><p>Every project you're part of.</p></div></div>
+
+{% if projects %}
+<div class="grid-3">
+  {% for p in projects %}
+  <div class="card card-body">
+    <span class="badge {{ 'badge-success' if p.status in ['COMPLETED','VERIFIED'] else 'badge-neutral' }}">{{ p.status }}</span>
+    <h4 style="margin-top:10px;">{{ p.name }}</h4>
+    <p style="font-size:13px;color:var(--ink-500);">{{ p.challenge.title }}</p>
+    <div class="progress-bar-track" style="margin:10px 0;"><div class="progress-bar-fill" style="width:{{ p.testing_progress }}%;"></div></div>
+    <a href="{{ url_for('student.project_workspace', project_id=p.id) }}" class="btn btn-outline btn-sm btn-block">Open Workspace</a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><i class="fa-solid fa-diagram-project"></i>You haven't joined a project yet.
+  <br><a href="{{ url_for('student.problems') }}" class="btn btn-primary btn-sm" style="margin-top:12px;">Explore Problems</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "itcell/_base.html" %}
+{% block title %}Citizens — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Citizens</h1><p>Monitor phone-verified citizen accounts and their submitted problems.</p></div></div>
+
+<div class="filters-bar">
+  <a href="{{ url_for('itcell.citizens') }}" class="btn btn-sm {{ 'btn-primary' if not status else 'btn-outline' }}">All</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Phone</th><th>Location</th><th>Problems Posted</th><th>Phone Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in citizens %}
+        <tr>
+          <td data-label="Name" class="row-title"><a href="{{ url_for('itcell.citizen_detail', citizen_id=c.id) }}">{{ c.user.full_name }}</a></td>
+          <td data-label="Phone">{{ c.user.phone or '—' }}</td>
+          <td data-label="Location">{{ c.city or '—' }}, {{ c.district or '—' }}</td>
+          <td data-label="Problems">{{ c.submitted_challenges|length }}</td>
+          <td data-label="Phone Status"><span class="badge {{ 'badge-success' if c.user.is_phone_verified else 'badge-warning' }}">{{ 'Verified' if c.user.is_phone_verified else 'Pending' }}</span></td>
+          <td data-label="Actions">
+            <a href="{{ url_for('itcell.citizen_detail', citizen_id=c.id) }}" class="btn btn-outline btn-sm">View</a>
+          </td>
+        </tr>
+        {% else %}<tr><td colspan="6">No citizens found.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

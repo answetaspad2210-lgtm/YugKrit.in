@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Register ULB / NGO — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><h2>ULB / NGO Registration</h2><p style="color:var(--ink-500);font-size:14px;">One shared dashboard for Urban Local Bodies and NGOs. Submitted for Government IT Cell verification.</p></div>
+    <form method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label>Organization Category *</label>
+        <select name="category" id="category-select" required>
+          <option value="ULB" {{ 'selected' if request.args.get('category')=='ULB' or not request.args.get('category') }}>Urban Local Body (ULB)</option>
+          <option value="NGO" {{ 'selected' if request.args.get('category')=='NGO' }}>NGO</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Organization Name *</label><input type="text" name="name" required></div>
+      <div class="form-group" id="ulb-type-group"><label>ULB Type</label>
+        <select name="ulb_type">
+          <option>Municipal Corporation</option><option>Municipality</option><option>Nagar Panchayat</option>
+        </select>
+      </div>
+      <div class="form-group" id="reg-number-group" style="display:none;">
+        <label>NGO Registration Number</label><input type="text" name="registration_number" placeholder="e.g. UP/2019/0004512">
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>District</label><input type="text" name="district"></div>
+        <div class="form-group"><label>State</label><input type="text" name="state"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Official Email *</label><input type="email" name="official_email" required></div>
+        <div class="form-group"><label>Website</label><input type="url" name="website"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Authorized Officer / Representative *</label><input type="text" name="authorized_officer" required></div>
+        <div class="form-group"><label>Designation</label><input type="text" name="designation"></div>
+      </div>
+      <div class="form-group"><label>Phone (used for login — password or OTP) *</label><input type="tel" name="phone" required placeholder="9876543210"></div>
+      <div class="form-group">
+        <label>Authorization / Registration Document</label>
+        <div class="file-drop" data-file-drop="document" data-file-list="doc-list">
+          <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag file (PDF, JPG, PNG)</p>
+        </div>
+        <input type="file" id="document" name="document" accept=".pdf,.jpg,.jpeg,.png" hidden>
+        <div class="file-list" id="doc-list"></div>
+      </div>
+      <div class="form-group"><label>Set Login Password *</label><input type="password" name="password" id="ulb-password" required minlength="6"></div>
+      <div class="form-group"><label>Confirm Password *</label><input type="password" name="confirm_password" required minlength="6" data-match="ulb-password"></div>
+      <button type="submit" class="btn btn-accent btn-block btn-lg">Submit Registration</button>
+    </form>
+    <div class="auth-links">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const select = document.getElementById("category-select");
+    const ulbTypeGroup = document.getElementById("ulb-type-group");
+    const regNumberGroup = document.getElementById("reg-number-group");
+    function sync() {
+      const isNgo = select.value === "NGO";
+      ulbTypeGroup.style.display = isNgo ? "none" : "block";
+      regNumberGroup.style.display = isNgo ? "block" : "none";
+    }
+    select.addEventListener("change", sync);
+    sync();
+  });
+</script>
+{% endblock %}

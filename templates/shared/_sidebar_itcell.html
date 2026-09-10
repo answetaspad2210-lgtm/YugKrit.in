@@ -1,0 +1,14 @@
+<a href="{{ url_for('itcell.overview') }}" class="{{ 'active' if request.endpoint=='itcell.overview' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('government.challenges') }}" class="{{ 'active' if request.endpoint in ['government.challenges','government.challenge_detail'] }}"><i class="fa-solid fa-triangle-exclamation"></i> Challenges</a>
+<a href="{{ url_for('government.universities') }}" class="{{ 'active' if request.endpoint=='government.universities' }}"><i class="fa-solid fa-graduation-cap"></i> Universities</a>
+<a href="{{ url_for('government.ulbs_ngos') }}" class="{{ 'active' if request.endpoint=='government.ulbs_ngos' }}"><i class="fa-solid fa-city"></i> ULBs & NGOs</a>
+<a href="{{ url_for('government.students') }}" class="{{ 'active' if request.endpoint=='government.students' }}"><i class="fa-solid fa-user-graduate"></i> Students</a>
+<a href="{{ url_for('itcell.citizens') }}" class="{{ 'active' if request.endpoint in ['itcell.citizens','itcell.citizen_detail'] }}"><i class="fa-solid fa-id-card"></i> Citizens</a>
+<a href="{{ url_for('government.projects') }}" class="{{ 'active' if request.endpoint=='government.projects' }}"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+<a href="{{ url_for('government.industry_monitoring') }}" class="{{ 'active' if request.endpoint=='government.industry_monitoring' }}"><i class="fa-solid fa-industry"></i> Industry Partners</a>
+<a href="{{ url_for('government.approvals') }}" class="{{ 'active' if request.endpoint=='government.approvals' }}"><i class="fa-solid fa-check-double"></i> Approvals</a>
+<a href="{{ url_for('government.map_view') }}" class="{{ 'active' if request.endpoint=='government.map_view' }}"><i class="fa-solid fa-map-location-dot"></i> Geo Map</a>
+<a href="{{ url_for('government.analytics') }}" class="{{ 'active' if request.endpoint=='government.analytics' }}"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>
+<a href="{{ url_for('government.audit_trail') }}" class="{{ 'active' if request.endpoint=='government.audit_trail' }}"><i class="fa-solid fa-list-check"></i> Audit Trail</a>
+<a href="{{ url_for('government.settings') }}" class="{{ 'active' if request.endpoint=='government.settings' }}"><i class="fa-solid fa-gear"></i> Settings</a>

@@ -1,0 +1,21 @@
+{% extends "student/_base.html" %}
+{% block title %}Certificates — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Certificates</h1><p>Your verified YugKrit Innovation Certificates.</p></div></div>
+
+{% if profile and profile.certificates %}
+<div class="grid-3">
+  {% for cert in profile.certificates %}
+  <div class="certificate-card">
+    <div class="cert-seal"><i class="fa-solid fa-certificate"></i></div>
+    <h4>{{ cert.project.name }}</h4>
+    <p style="font-size:13px;color:var(--ink-500);">{{ cert.role_in_project }}</p>
+    <p class="certificate-id">{{ cert.certificate_id }}</p>
+    <a href="{{ url_for('certificate.verify_certificate', certificate_id=cert.certificate_id) }}" class="btn btn-outline btn-sm" style="margin-top:12px;" target="_blank">View Public Verification</a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><i class="fa-solid fa-certificate"></i>Certificates are issued automatically once a project you're part of is verified as complete.</div>
+{% endif %}
+{% endblock %}

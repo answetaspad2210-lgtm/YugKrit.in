@@ -1,0 +1,8 @@
+<a href="{{ url_for('university.overview') }}" class="{{ 'active' if request.endpoint=='university.overview' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('university.marketplace') }}" class="{{ 'active' if request.endpoint in ['university.marketplace','university.challenge_detail'] }}"><i class="fa-solid fa-store"></i> Challenge Marketplace</a>
+<a href="{{ url_for('university.collaboration_requests') }}" class="{{ 'active' if request.endpoint in ['university.collaboration_requests','university.review_collaboration'] }}"><i class="fa-solid fa-handshake"></i> Industry Requests</a>
+<a href="{{ url_for('university.projects') }}" class="{{ 'active' if request.endpoint in ['university.projects','university.project_workspace','university.create_project'] }}"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+<a href="{{ url_for('university.students') }}" class="{{ 'active' if request.endpoint=='university.students' }}"><i class="fa-solid fa-user-graduate"></i> Students</a>
+<a href="{{ url_for('university.faculty') }}" class="{{ 'active' if request.endpoint=='university.faculty' }}"><i class="fa-solid fa-chalkboard-user"></i> Faculty</a>
+<a href="{{ url_for('university.analytics') }}" class="{{ 'active' if request.endpoint=='university.analytics' }}"><i class="fa-solid fa-chart-line"></i> Impact & Analytics</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>

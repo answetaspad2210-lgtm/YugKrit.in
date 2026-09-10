@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}For Organizations — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="hero" style="padding:60px 0;">
+  <div class="container">
+    <h1 style="font-size:36px;">Turn ground-level problems into funded student solutions.</h1>
+    <p class="lead">ULBs and NGOs can submit real civic problems with evidence and location — and get them
+      matched with capable university teams, at no cost.</p>
+    <div class="hero-cta">
+      <a href="{{ url_for('auth.register_ulb') }}" class="btn btn-accent btn-lg">Register as ULB</a>
+      <a href="{{ url_for('auth.register_ngo') }}" class="btn btn-outline btn-lg" style="background:#fff;">Register as NGO</a>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container grid-3">
+    <div class="card card-body"><i class="fa-solid fa-map-pin" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Submit With Evidence</h4><p style="font-size:13.5px;color:var(--ink-500);">Pin the exact location, upload photos and documents, and describe affected population.</p></div>
+    <div class="card card-body"><i class="fa-solid fa-shield-check" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Government Verified</h4><p style="font-size:13.5px;color:var(--ink-500);">Every submission is reviewed and verified before being matched to a university.</p></div>
+    <div class="card card-body"><i class="fa-solid fa-hand-holding-heart" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Validate Solutions</h4><p style="font-size:13.5px;color:var(--ink-500);">Give community feedback and validate the delivered solution before it's marked complete.</p></div>
+  </div>
+</section>
+{% endblock %}

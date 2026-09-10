@@ -1,0 +1,45 @@
+{% extends "ulb/_base.html" %}
+{% block title %}{{ challenge.title }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('ulb.my_challenges') }}">My Challenges</a> / {{ challenge.challenge_code }}</div>
+<div class="page-header">
+  <div><h1>{{ challenge.title }}</h1><p>{{ challenge.category.name if challenge.category else '—' }}</p></div>
+  <span class="badge badge-neutral" style="font-size:13px;padding:8px 16px;">{{ challenge.status }}</span>
+</div>
+
+<div class="grid-2">
+  <div class="card card-body">
+    <h3>Description</h3>
+    <p>{{ challenge.description }}</p>
+    <div class="detail-list">
+      <div class="row"><span class="label">Affected Population</span><span class="value">{{ challenge.affected_population }}</span></div>
+      <div class="row"><span class="label">Urgency</span><span class="value">{{ challenge.urgency }}</span></div>
+      <div class="row"><span class="label">Location</span><span class="value">{{ challenge.location.district if challenge.location else '—' }}</span></div>
+      <div class="row"><span class="label">Priority Score</span><span class="value">{{ challenge.priority_score }}/100</span></div>
+      <div class="row"><span class="label">Assigned University</span><span class="value">{{ challenge.assigned_university.organization.name if challenge.assigned_university else 'Not yet assigned' }}</span></div>
+    </div>
+  </div>
+  <div class="card card-body">
+    <h3>Evidence Submitted</h3>
+    {% for e in challenge.evidence_items %}
+      <div class="file-item"><span><i class="fa-solid fa-paperclip"></i> {{ e.file_name }}</span><span class="badge badge-neutral">{{ e.evidence_type }}</span></div>
+    {% else %}
+      <p style="color:var(--ink-500);font-size:13px;">No evidence attached.</p>
+    {% endfor %}
+
+    {% if challenge.projects %}
+      <h3 style="margin-top:20px;">Linked Project</h3>
+      {% for p in challenge.projects %}
+        <p><strong>{{ p.name }}</strong> — <span class="badge badge-neutral">{{ p.status }}</span></p>
+        {% if p.status in ['COMPLETED','VERIFIED'] %}
+        <form method="post" action="{{ url_for('ulb.validate_project', project_id=p.id) }}">
+          <div class="form-group"><label>Community Feedback</label><textarea name="feedback" required></textarea></div>
+          <div class="form-group"><label>Rating (1-5)</label><input type="number" name="rating" min="1" max="5" value="5"></div>
+          <button type="submit" class="btn btn-primary btn-block">Submit Validation</button>
+        </form>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

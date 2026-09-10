@@ -1,0 +1,30 @@
+{% extends "government/_base.html" %}
+{% block title %}Students — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Students</h1><p>Platform-wide monitoring of every student profile across all universities.</p></div></div>
+
+<form class="filters-bar" method="get">
+  <input type="text" name="q" placeholder="Search by name..." value="{{ search }}">
+  <button class="btn btn-outline btn-sm" type="submit">Search</button>
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Institution</th><th>Registration No.</th><th>Department</th><th>Status</th><th>Projects</th></tr></thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td data-label="Name" class="row-title">{{ s.full_name }}</td>
+          <td data-label="Institution">{{ s.institution.organization.name }}</td>
+          <td data-label="Reg No">{{ s.registration_number }}</td>
+          <td data-label="Department">{{ s.department or '—' }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if s.status=='ACTIVE' else 'badge-warning' }}">{{ s.status }}</span></td>
+          <td data-label="Projects">{{ s.team_memberships|length }}</td>
+        </tr>
+        {% else %}<tr><td colspan="6">No students found.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

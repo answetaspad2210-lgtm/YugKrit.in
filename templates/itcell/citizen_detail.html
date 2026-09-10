@@ -1,0 +1,44 @@
+{% extends "itcell/_base.html" %}
+{% block title %}{{ citizen.user.full_name }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('itcell.citizens') }}">Citizens</a> / {{ citizen.user.full_name }}</div>
+<div class="page-header">
+  <div><h1>{{ citizen.user.full_name }}</h1><p>{{ citizen.user.email }}</p></div>
+  <span class="badge {{ 'badge-success' if citizen.user.is_phone_verified else 'badge-warning' }}" style="font-size:13px;padding:8px 16px;">{{ 'PHONE VERIFIED' if citizen.user.is_phone_verified else 'PHONE PENDING' }}</span>
+</div>
+
+<div class="grid-2">
+  <div class="card card-body">
+    <h3>Citizen Details</h3>
+    <div class="detail-list">
+      <div class="row"><span class="label">Phone</span><span class="value">{{ citizen.user.phone or '—' }}</span></div>
+      <div class="row"><span class="label">Address</span><span class="value">{{ citizen.address or '—' }}</span></div>
+      <div class="row"><span class="label">City / District</span><span class="value">{{ citizen.city or '—' }}, {{ citizen.district or '—' }}</span></div>
+      <div class="row"><span class="label">State</span><span class="value">{{ citizen.state or '—' }}</span></div>
+      <div class="row"><span class="label">Registered</span><span class="value">{{ citizen.created_at.strftime('%d %b %Y') }}</span></div>
+      {% if citizen.verified_by %}
+      <div class="row"><span class="label">Verified By</span><span class="value">{{ citizen.verified_by.full_name }}</span></div>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3 style="margin:0;font-size:15px;">Problems Posted ({{ submitted|length }})</h3></div>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Title</th><th>Priority</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for c in submitted %}
+          <tr>
+            <td data-label="Title" class="row-title">{{ c.title }}</td>
+            <td data-label="Priority"><span class="badge {{ 'badge-danger' if c.priority_score>=70 else 'badge-warning' }}">{{ c.priority_score }}</span></td>
+            <td data-label="Status"><span class="badge badge-neutral">{{ c.status }}</span></td>
+          </tr>
+          {% else %}<tr><td colspan="3">No problems posted yet.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

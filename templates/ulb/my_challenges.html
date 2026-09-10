@@ -1,0 +1,28 @@
+{% extends "ulb/_base.html" %}
+{% block title %}My Challenges — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div><h1>My Challenges</h1><p>Track the status of every challenge you've submitted.</p></div>
+  <a href="{{ url_for('ulb.submit_challenge') }}" class="btn btn-primary"><i class="fa-solid fa-square-plus"></i> Submit New</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Challenge</th><th>Category</th><th>Priority</th><th>Status</th><th>Submitted</th><th></th></tr></thead>
+      <tbody>
+        {% for c in challenges %}
+        <tr>
+          <td data-label="Challenge" class="row-title">{{ c.title }}<br><small style="color:var(--ink-500);">{{ c.challenge_code }}</small></td>
+          <td data-label="Category">{{ c.category.name if c.category else '—' }}</td>
+          <td data-label="Priority"><span class="badge {{ 'badge-danger' if c.priority_score>=70 else 'badge-warning' }}">{{ c.priority_score }}</span></td>
+          <td data-label="Status"><span class="badge badge-neutral">{{ c.status }}</span></td>
+          <td data-label="Submitted">{{ c.created_at.strftime('%d %b %Y') }}</td>
+          <td data-label=""><a href="{{ url_for('ulb.challenge_detail', challenge_id=c.id) }}" class="btn btn-outline btn-sm">View</a></td>
+        </tr>
+        {% else %}<tr><td colspan="6">You haven't submitted any challenges yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+<script>
+  if (window.location.port === "5500") {
+    window.location.replace("http://127.0.0.1:5000/");
+  }
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ app_name }} — {{ app_tagline }}{% endblock %}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}?v=20260906-hero">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}?v=20260906-hero">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="toast {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+{% include "shared/navbar.html" %}
+
+{% block content %}{% endblock %}
+
+{% include "shared/footer.html" %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

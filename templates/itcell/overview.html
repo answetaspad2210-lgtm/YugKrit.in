@@ -1,0 +1,49 @@
+{% extends "itcell/_base.html" %}
+{% block title %}IT Cell Command Center — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div><h1>IT Cell Command Center</h1><p>Platform-wide monitoring, progress tracking, validation and approval — across every organization, university, student and citizen on YugKrit.</p></div>
+  <a href="{{ url_for('government.approvals') }}" class="btn btn-primary"><i class="fa-solid fa-check-double"></i> Review Approvals</a>
+</div>
+
+<div class="stat-cards">
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-blue-light);color:var(--color-blue);"><i class="fa-solid fa-graduation-cap"></i></div><div><div class="stat-card-value">{{ stats.universities_verified }}/{{ stats.universities }}</div><div class="stat-card-label">Universities Verified</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-accent-light);color:var(--color-accent);"><i class="fa-solid fa-city"></i></div><div><div class="stat-card-value">{{ stats.ulbs_ngos_verified }}/{{ stats.ulbs_ngos }}</div><div class="stat-card-label">ULBs/NGOs Verified</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-primary-light);color:var(--color-primary);"><i class="fa-solid fa-user-graduate"></i></div><div><div class="stat-card-value">{{ stats.students }}</div><div class="stat-card-label">Students Monitored</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-info-light);color:var(--color-info);"><i class="fa-solid fa-id-card"></i></div><div><div class="stat-card-value">{{ stats.citizens_verified }}/{{ stats.citizens }}</div><div class="stat-card-label">Citizens Verified</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-warning-light);color:var(--color-warning);"><i class="fa-solid fa-triangle-exclamation"></i></div><div><div class="stat-card-value">{{ stats.total_challenges }}</div><div class="stat-card-label">Total Challenges</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-success-light);color:var(--color-success);"><i class="fa-solid fa-diagram-project"></i></div><div><div class="stat-card-value">{{ stats.active_projects }}</div><div class="stat-card-label">Active Projects</div></div></div>
+</div>
+
+<div class="grid-3" style="margin-bottom:24px;">
+  <div class="card card-body" style="text-align:center;">
+    <div class="stat-card-value" style="color:var(--color-warning);">{{ pending_orgs_count }}</div>
+    <div class="stat-card-label">Organizations Pending</div>
+    <a href="{{ url_for('government.approvals') }}" class="btn btn-outline btn-sm" style="margin-top:10px;">Review</a>
+  </div>
+  <div class="card card-body" style="text-align:center;">
+    <div class="stat-card-value" style="color:var(--color-warning);">{{ pending_challenges_count }}</div>
+    <div class="stat-card-label">Challenges Pending</div>
+    <a href="{{ url_for('government.challenges', status='SUBMITTED') }}" class="btn btn-outline btn-sm" style="margin-top:10px;">Review</a>
+  </div>
+  <div class="card card-body" style="text-align:center;">
+    <div class="stat-card-value" style="color:var(--color-warning);">{{ pending_citizens_count }}</div>
+    <div class="stat-card-label">Phone-verified Citizens</div>
+    <a href="{{ url_for('itcell.citizens', status='PENDING') }}" class="btn btn-outline btn-sm" style="margin-top:10px;">Review</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h3 style="margin:0;font-size:16px;">Recent Platform Activity</h3><a href="{{ url_for('government.audit_trail') }}" class="btn btn-outline btn-sm">Full Audit Trail</a></div>
+  <div style="padding:6px 0;">
+    {% for a in recent_activity %}
+    <div style="display:flex;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border-color);">
+      <div><strong style="font-size:13px;">{{ a.action }}</strong> <span style="font-size:12px;color:var(--ink-500);">by {{ a.role_name }} on {{ a.entity }} #{{ a.entity_id }}</span></div>
+      <span style="font-size:12px;color:var(--ink-500);">{{ a.timestamp.strftime('%d %b, %I:%M %p') }}</span>
+    </div>
+    {% else %}
+    <div class="empty-state"><i class="fa-solid fa-clock"></i>No activity recorded yet.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

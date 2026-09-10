@@ -1,0 +1,30 @@
+{% extends "government/_base.html" %}
+{% block title %}Approvals — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Approvals Queue</h1><p>Everything currently waiting on a government decision.</p></div></div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-header"><h3 style="margin:0;font-size:15px;">Organizations Awaiting Verification ({{ pending_orgs|length }})</h3></div>
+    {% for org in pending_orgs %}
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;">
+      <div><strong>{{ org.name }}</strong><br><span style="font-size:12px;color:var(--ink-500);">{{ org.org_type }} · {{ org.district or '—' }}</span></div>
+      <form method="post" action="{{ url_for('government.verify_organization', org_id=org.id) }}">
+        <button name="decision" value="approve" class="btn btn-success btn-sm" type="submit">Approve</button>
+        <button name="decision" value="reject" class="btn btn-danger btn-sm" type="submit">Reject</button>
+      </form>
+    </div>
+    {% else %}<div class="empty-state"><i class="fa-solid fa-check"></i>Nothing pending.</div>{% endfor %}
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h3 style="margin:0;font-size:15px;">Challenges Awaiting Verification ({{ pending_challenges|length }})</h3></div>
+    {% for c in pending_challenges %}
+    <a href="{{ url_for('government.challenge_detail', challenge_id=c.id) }}" style="display:block;padding:14px 20px;border-bottom:1px solid var(--border-color);">
+      <strong>{{ c.title }}</strong><br><span style="font-size:12px;color:var(--ink-500);">{{ c.category.name if c.category else '' }} · Priority {{ c.priority_score }} · by {{ c.submitter_name() }}</span>
+    </a>
+    {% else %}<div class="empty-state"><i class="fa-solid fa-check"></i>Nothing pending.</div>{% endfor %}
+  </div>
+</div>
+
+{% endblock %}

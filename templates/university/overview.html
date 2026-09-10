@@ -1,0 +1,65 @@
+{% extends "university/_base.html" %}
+{% block title %}University Overview — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div><h1>{{ university.organization.name if university else 'University Dashboard' }}</h1><p>Welcome back, {{ current_user.full_name }}.</p></div>
+  <a href="{{ url_for('university.marketplace') }}" class="btn btn-primary"><i class="fa-solid fa-store"></i> Browse Challenges</a>
+</div>
+
+{% if university and university.organization.status != 'VERIFIED' %}
+<div class="demo-banner">
+  <strong>Verification pending.</strong> Your university's status is <strong>{{ university.organization.status }}</strong>.
+  Some actions will unlock once government verification is complete.
+</div>
+{% endif %}
+
+<div class="stat-cards">
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-primary-light);color:var(--color-primary);"><i class="fa-solid fa-store"></i></div><div><div class="stat-card-value">{{ stats.challenges_available }}</div><div class="stat-card-label">Challenges Available</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-info-light);color:var(--color-info);"><i class="fa-solid fa-diagram-project"></i></div><div><div class="stat-card-value">{{ stats.active_projects }}</div><div class="stat-card-label">Active Projects</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-accent-light);color:var(--color-accent);"><i class="fa-solid fa-user-graduate"></i></div><div><div class="stat-card-value">{{ stats.students }}</div><div class="stat-card-label">Students</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-blue-light);color:var(--color-blue);"><i class="fa-solid fa-chalkboard-user"></i></div><div><div class="stat-card-value">{{ stats.faculty }}</div><div class="stat-card-label">Faculty</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-warning-light);color:var(--color-warning);"><i class="fa-solid fa-hourglass-half"></i></div><div><div class="stat-card-value">{{ stats.pending_reviews }}</div><div class="stat-card-label">Pending Reviews</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-success-light);color:var(--color-success);"><i class="fa-solid fa-circle-check"></i></div><div><div class="stat-card-value">{{ stats.completed_projects }}</div><div class="stat-card-label">Completed Projects</div></div></div>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-header"><h3 style="margin:0;font-size:16px;">Government-Verified Problems</h3><a href="{{ url_for('university.marketplace') }}" class="btn btn-outline btn-sm">View All</a></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Problem</th><th>Category</th><th>Location</th><th>People Affected</th><th>Priority</th><th></th></tr></thead>
+      <tbody>
+        {% for challenge in verified_challenges %}
+        <tr>
+          <td data-label="Problem" class="row-title">{{ challenge.title }}<br><small style="color:var(--ink-500);">{{ challenge.challenge_code }}</small></td>
+          <td data-label="Category">{{ challenge.category.name if challenge.category else 'General' }}{% if challenge.subcategory %}<br><small style="color:var(--ink-500);">{{ challenge.subcategory }}</small>{% endif %}</td>
+          <td data-label="Location">{{ challenge.location.district if challenge.location else '—' }}, {{ challenge.location.state if challenge.location else '—' }}</td>
+          <td data-label="People Affected">{{ challenge.affected_population }}</td>
+          <td data-label="Priority"><span class="badge {{ 'badge-danger' if challenge.priority_score >= 70 else 'badge-warning' }}">{{ challenge.priority_score }}</span></td>
+          <td data-label=""><a href="{{ url_for('university.challenge_detail', challenge_id=challenge.id) }}" class="btn btn-primary btn-sm">View Problem</a></td>
+        </tr>
+        {% else %}<tr><td colspan="6">No government-verified problems are available yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h3 style="margin:0;font-size:16px;">My Projects</h3><a href="{{ url_for('university.projects') }}" class="btn btn-outline btn-sm">View All</a></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Challenge</th><th>Status</th><th>Progress</th><th></th></tr></thead>
+      <tbody>
+        {% for p in my_projects %}
+        <tr>
+          <td data-label="Project" class="row-title">{{ p.name }}</td>
+          <td data-label="Challenge">{{ p.challenge.title }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if p.status in ['COMPLETED','VERIFIED'] else 'badge-neutral' }}">{{ p.status }}</span></td>
+          <td data-label="Progress"><div class="progress-bar-track"><div class="progress-bar-fill" style="width:{{ p.testing_progress }}%;"></div></div></td>
+          <td data-label=""><a href="{{ url_for('university.project_workspace', project_id=p.id) }}" class="btn btn-outline btn-sm">Open</a></td>
+        </tr>
+        {% else %}<tr><td colspan="5">No projects yet — accept a challenge from the marketplace to get started.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

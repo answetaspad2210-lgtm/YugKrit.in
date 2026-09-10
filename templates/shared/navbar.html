@@ -1,0 +1,26 @@
+<nav class="public-nav">
+  <div class="container public-nav-inner">
+    <a href="{{ url_for('public.home') }}" class="brand">
+      <img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo" class="brand-logo">
+      <span>YugKrit<small>From Problems to Solutions</small></span>
+    </a>
+    <div class="public-nav-links">
+      <a href="{{ url_for('public.home') }}">Home</a>
+      <a href="{{ url_for('public.about') }}">About</a>
+      <a href="{{ url_for('public.how_it_works') }}">How It Works</a>
+      <a href="{{ url_for('public.explore_challenges') }}">Explore Challenges</a>
+      <a href="{{ url_for('public.impact') }}">Impact</a>
+      <a href="{{ url_for('public.for_universities') }}">For Universities</a>
+      <a href="{{ url_for('public.for_organizations') }}">For Organizations</a>
+    </div>
+    <div class="nav-actions">
+      {% if current_user %}
+        <span class="btn btn-outline btn-sm" style="pointer-events:none;">{{ current_user.full_name }}</span>
+        <a class="btn btn-primary btn-sm" href="/dashboard/{{ 'it-cell' if current_user.role_name()=='GOVT_IT_CELL_ADMIN' else ('government' if 'GOVERNMENT' in current_user.role_name() else ('university' if current_user.role_name() in ['UNIVERSITY_ADMIN','FACULTY'] else ('ulb' if current_user.role_name() in ['ULB_ADMIN','NGO_ADMIN'] else ('citizen' if current_user.role_name()=='CITIZEN' else 'student')))) }}">Dashboard</a>
+      {% else %}
+        <a class="btn btn-outline btn-sm" href="{{ url_for('auth.login') }}">Login</a>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('auth.register_landing') }}">Join YugKrit</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

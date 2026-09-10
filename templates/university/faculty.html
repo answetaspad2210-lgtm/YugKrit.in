@@ -1,0 +1,23 @@
+{% extends "university/_base.html" %}
+{% block title %}Faculty — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Faculty</h1><p>Faculty members who can mentor student project teams.</p></div></div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Department</th><th>Designation</th><th>Mentored Projects</th></tr></thead>
+      <tbody>
+        {% for f in faculty_list %}
+        <tr>
+          <td data-label="Name" class="row-title">{{ f.user.full_name }}</td>
+          <td data-label="Department">{{ f.department or '—' }}</td>
+          <td data-label="Designation">{{ f.designation or '—' }}</td>
+          <td data-label="Projects">{{ f.mentored_projects|length }}</td>
+        </tr>
+        {% else %}<tr><td colspan="4">No faculty added yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

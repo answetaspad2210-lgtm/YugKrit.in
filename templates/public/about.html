@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}About — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:820px;">
+    <h1>About YugKrit</h1>
+    <p>YugKrit — <em>"From Problems to Solutions"</em> — is a societal innovation and collaboration platform
+      that connects Government bodies, Universities, ULBs/NGOs, and Students to solve real-world civic
+      problems through verified, tracked, and measurable student-led solutions.</p>
+
+    <h3 style="margin-top:34px;">Why YugKrit?</h3>
+    <p>Millions of genuine local problems — from park safety to waste management — never reach the people
+      capable of solving them. Meanwhile thousands of talented student teams look for real, meaningful projects.
+      YugKrit closes that gap with a transparent, verified pipeline: from problem submission, to government
+      verification, to university-led project execution, to community-validated impact and permanent student
+      recognition.</p>
+
+    <h3 style="margin-top:34px;">Built for scale</h3>
+    <p>YugKrit's architecture is intentionally modular. Government, University, ULB/NGO and Student dashboards
+      share one authentication system, one database, and one permission model — making it straightforward to add
+      Industry, Citizen, Mentor, or other future dashboards without rebuilding the platform.</p>
+
+    <div class="grid-3" style="margin-top:40px;">
+      <div class="card card-body"><i class="fa-solid fa-scale-balanced" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Verified</h4><p style="font-size:13.5px;color:var(--ink-500);">Every challenge and solution is checked by government and community stakeholders.</p></div>
+      <div class="card card-body"><i class="fa-solid fa-layer-group" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Modular</h4><p style="font-size:13.5px;color:var(--ink-500);">Roles, permissions and dashboards are all data-driven and extensible.</p></div>
+      <div class="card card-body"><i class="fa-solid fa-chart-simple" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Measurable</h4><p style="font-size:13.5px;color:var(--ink-500);">Impact, skills, and achievements are tracked automatically end-to-end.</p></div>
+    </div>
+  </div>
+</section>
+{% endblock %}

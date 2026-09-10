@@ -1,0 +1,46 @@
+{% extends "government/_base.html" %}
+{% block title %}Challenges — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Challenges</h1><p>Verify, assign, and manage all submitted societal challenges.</p></div></div>
+
+<form class="filters-bar" data-filter-form method="get">
+  <input type="text" name="q" placeholder="Search by title..." value="{{ search }}">
+  <select name="status">
+    <option value="">All Status</option>
+    {% for s in ['SUBMITTED','UNDER_REVIEW','VERIFIED','REJECTED','ASSIGNED','IN_PROGRESS','RESOLVED'] %}
+      <option value="{{ s }}" {{ 'selected' if status==s }}>{{ s }}</option>
+    {% endfor %}
+  </select>
+  <select name="category">
+    <option value="">All Categories</option>
+    {% for c in categories %}<option value="{{ c.name }}" {{ 'selected' if category==c.name }}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <button class="btn btn-outline btn-sm" type="submit">Search</button>
+</form>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Challenge</th><th>Source</th><th>Category</th><th>Location</th><th>Priority</th><th>Problem Owner</th><th>University</th><th>Status</th><th>Updated</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for c in challenges %}
+        <tr>
+          <td data-label="Challenge" class="row-title">{{ c.title }}<br><small style="color:var(--ink-500);">{{ c.challenge_code }}</small></td>
+          <td data-label="Source"><span class="badge {{ 'badge-info' if c.submitted_by_citizen else 'badge-neutral' }}">{{ 'Citizen' if c.submitted_by_citizen else 'Organization' }}</span></td>
+          <td data-label="Category">{{ c.category.name if c.category else '—' }}</td>
+          <td data-label="Location">{{ c.location.district if c.location else '—' }}{% if c.location and c.location.state %}<br><small style="color:var(--ink-500);">{{ c.location.state }}</small>{% endif %}</td>
+          <td data-label="Priority"><span class="badge {{ 'badge-danger' if c.priority_score>=70 else 'badge-warning' }}">{{ c.priority_score }}</span></td>
+          <td data-label="Problem Owner">{{ c.problem_owner_org.name if c.problem_owner_org else '—' }}</td>
+          <td data-label="University">{{ c.assigned_university.organization.name if c.assigned_university else '—' }}</td>
+          <td data-label="Status"><span class="badge badge-neutral">{{ c.status }}</span></td>
+          <td data-label="Updated">{{ c.updated_at.strftime('%d %b') }}</td>
+          <td data-label="Actions"><a href="{{ url_for('government.challenge_detail', challenge_id=c.id) }}" class="btn btn-outline btn-sm">View</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="10">No challenges found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

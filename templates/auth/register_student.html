@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Register as Student — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><h2>Start Your Innovation Journey</h2><p style="color:var(--ink-500);font-size:14px;">Create your permanent YugKrit student profile.</p></div>
+    <form method="post">
+      <div class="form-group"><label>Full Name *</label><input type="text" name="full_name" required></div>
+      <div class="form-group"><label>College Email *</label><input type="email" name="college_email" required placeholder="you@college.edu"></div>
+      <div class="form-group"><label>Institution *</label>
+        <select name="institution_id" required>
+          <option value="">Select your institution</option>
+          {% for u in universities %}
+            <option value="{{ u.id }}">{{ u.organization.name }}</option>
+          {% endfor %}
+        </select>
+        <div class="form-hint">Don't see your institution? Ask them to register on YugKrit first.</div>
+      </div>
+      <div class="form-group"><label>Registration Number *</label><input type="text" name="registration_number" required placeholder="ABC2026CS102"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Department</label><input type="text" name="department"></div>
+        <div class="form-group"><label>Course</label><input type="text" name="course"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Year</label>
+          <select name="year"><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option></select>
+        </div>
+        <div class="form-group"><label>Phone (used for login — password or OTP) *</label><input type="tel" name="phone" required placeholder="9876543210"></div>
+      </div>
+      <div class="form-group"><label>Skills (comma separated)</label><input type="text" name="skills" placeholder="Python, IoT, GIS"></div>
+      <div class="form-group"><label>Interests (comma separated)</label><input type="text" name="interests" placeholder="Sustainability, Smart Cities"></div>
+      <div class="form-group"><label>Set Password *</label><input type="password" name="password" id="student-password" required minlength="6"></div>
+      <div class="form-group"><label>Confirm Password *</label><input type="password" name="confirm_password" required minlength="6" data-match="student-password"></div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Create My Profile</button>
+    </form>
+    <div class="auth-links">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/auth.js') }}"></script>{% endblock %}

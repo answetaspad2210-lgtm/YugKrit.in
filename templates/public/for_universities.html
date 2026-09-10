@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}For Universities — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="hero" style="padding:60px 0;">
+  <div class="container">
+    <h1 style="font-size:36px;">Give your students real problems to solve.</h1>
+    <p class="lead">Access a marketplace of government-verified societal challenges, build student teams, and
+      track measurable impact — all from one dashboard.</p>
+    <a href="{{ url_for('auth.register_university') }}" class="btn btn-accent btn-lg">Register Your University</a>
+  </div>
+</section>
+<section class="section">
+  <div class="container grid-3">
+    <div class="card card-body"><i class="fa-solid fa-store" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Challenge Marketplace</h4><p style="font-size:13.5px;color:var(--ink-500);">Filter verified challenges by category, district, priority and required skills.</p></div>
+    <div class="card card-body"><i class="fa-solid fa-people-group" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Team Builder</h4><p style="font-size:13.5px;color:var(--ink-500);">Add students by registration number — YugKrit automatically links existing profiles, never duplicating data.</p></div>
+    <div class="card card-body"><i class="fa-solid fa-chart-line" style="color:var(--color-primary);font-size:22px;"></i><h4 style="margin-top:10px;">Impact Tracking</h4><p style="font-size:13.5px;color:var(--ink-500);">Milestones, faculty review, and community validation are all tracked in one workspace.</p></div>
+  </div>
+</section>
+{% endblock %}

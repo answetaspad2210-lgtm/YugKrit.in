@@ -1,0 +1,23 @@
+{% extends "student/_base.html" %}
+{% block title %}{{ challenge.title }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('student.problems') }}">Problem Explorer</a> / {{ challenge.challenge_code }}</div>
+<div class="page-header">
+  <div><h1>{{ challenge.title }}</h1><p>{{ challenge.category.name if challenge.category else '—' }}</p></div>
+  <span class="badge {{ 'badge-danger' if challenge.priority_score>=70 else 'badge-warning' }}" style="font-size:14px;padding:8px 16px;">Priority {{ challenge.priority_score }}/100</span>
+</div>
+
+<div class="card card-body">
+  <h3>Description</h3>
+  <p>{{ challenge.description }}</p>
+  <div class="detail-list">
+    <div class="row"><span class="label">Affected Population</span><span class="value">{{ challenge.affected_population }}</span></div>
+    <div class="row"><span class="label">Location</span><span class="value">{{ challenge.location.district if challenge.location else '—' }}</span></div>
+    <div class="row"><span class="label">Suggested Skills</span><span class="value">{{ challenge.required_skills or '—' }}</span></div>
+  </div>
+  <p style="margin-top:16px;font-size:13px;color:var(--ink-500);">
+    To work on this problem, join a university project team assigned to this challenge, or discuss the
+    independent-track option with your faculty mentor.
+  </p>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "student/_base.html" %}
+{% block title %}Growth Profile — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+
+{% if profile %}
+<div class="profile-hero">
+  <h1>{{ profile.full_name }}</h1>
+  <p>{{ profile.institution.organization.name }} · {{ profile.department or 'Department not set' }}</p>
+</div>
+
+<div class="growth-stats">
+  <div class="growth-stat"><div class="num">{{ growth.projects_completed }}</div><div class="lab">Projects Completed</div></div>
+  <div class="growth-stat"><div class="num">{{ growth.problems_addressed }}</div><div class="lab">Problems Addressed</div></div>
+  <div class="growth-stat"><div class="num">{{ growth.solutions_proposed }}</div><div class="lab">Solutions Proposed</div></div>
+  <div class="growth-stat"><div class="num">{{ growth.certificates }}</div><div class="lab">Certificates</div></div>
+  <div class="growth-stat"><div class="num">{{ growth.skills_count }}</div><div class="lab">Skills Demonstrated</div></div>
+  <div class="growth-stat"><div class="num">{{ growth.people_impacted }}</div><div class="lab">People Impacted</div></div>
+</div>
+
+<div class="grid-2">
+  <div class="card card-body">
+    <h3>Skills</h3>
+    <div class="skills-tags">
+      {% for s in growth.skills %}<span class="tag">{{ s }}</span>{% else %}<span style="color:var(--ink-500);font-size:13px;">No skills added yet.</span>{% endfor %}
+    </div>
+  </div>
+  <div class="card card-body">
+    <h3>Projects</h3>
+    {% for p in growth.projects %}
+      <div style="padding:8px 0;border-bottom:1px dashed var(--border-color);font-size:13.5px;">{{ p.name }} <span class="badge badge-neutral" style="margin-left:6px;">{{ p.status }}</span></div>
+    {% else %}<p style="color:var(--ink-500);font-size:13px;">No projects yet.</p>{% endfor %}
+  </div>
+</div>
+
+<div class="card card-body" style="margin-top:20px;">
+  <h3>Achievements</h3>
+  {% for a in growth.achievements %}
+    <p style="font-size:13.5px;">✓ {{ a.achievement.title }} <span style="color:var(--ink-500);">— {{ a.project.name if a.project else '' }}</span></p>
+  {% else %}
+    <p style="color:var(--ink-500);font-size:13px;">No achievements unlocked yet.</p>
+  {% endfor %}
+</div>
+
+<div class="card card-body" style="margin-top:20px;">
+  <h3>Certificates</h3>
+  {% for c in growth.certificates_list %}
+    <p style="font-size:13.5px;"><i class="fa-solid fa-certificate" style="color:var(--color-accent);"></i> {{ c.project.name }} — <span class="certificate-id">{{ c.certificate_id }}</span></p>
+  {% else %}
+    <p style="color:var(--ink-500);font-size:13px;">No certificates issued yet.</p>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><i class="fa-solid fa-id-card"></i>Your growth profile will appear here once your student profile is linked.</div>
+{% endif %}
+{% endblock %}

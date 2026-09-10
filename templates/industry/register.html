@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Industry Registration — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page"><div class="auth-card wide">
+  <h2>Register Industry / Organization</h2><p class="auth-subtitle">Join YugKrit as a capability, technology, and implementation partner.</p>
+  <form method="post">
+    <div class="form-row"><div class="form-group"><label>Organization Name *</label><input name="organization_name" required></div><div class="form-group"><label>Organization Type *</label><select name="organization_type" required><option value="">Select type</option>{% for value in organization_types %}<option>{{ value }}</option>{% endfor %}</select></div></div>
+    <div class="form-row"><div class="form-group"><label>Industry Sector *</label><select name="sector" required><option value="">Select sector</option>{% for value in sectors %}<option>{{ value }}</option>{% endfor %}</select></div><div class="form-group"><label>Sub-sector</label><input name="sub_sector"></div></div>
+    <div class="form-row"><div class="form-group"><label>Organization Size</label><select name="organization_size"><option>Startup</option><option>Small</option><option>Medium</option><option>Large</option><option>Enterprise</option></select></div><div class="form-group"><label>Location</label><input name="location"></div></div>
+    <div class="form-row"><div class="form-group"><label>District</label><input name="district"></div><div class="form-group"><label>State</label><input name="state"></div></div>
+    <div class="form-group"><label>Website</label><input name="website" type="url"></div>
+    <div class="form-group"><label>Contact Person *</label><input name="contact_person" required></div>
+    <div class="form-row"><div class="form-group"><label>Official Email *</label><input name="official_email" type="email" required></div><div class="form-group"><label>Phone *</label><input name="phone" required></div></div>
+    <div class="form-group"><label>Organization Description</label><textarea name="description"></textarea></div>
+    <div class="form-row"><div class="form-group"><label>Expertise</label><input name="expertise" placeholder="IoT, water monitoring, AI"></div><div class="form-group"><label>Technologies</label><input name="technologies" placeholder="Sensors, cloud, analytics"></div></div>
+    <div class="form-row"><div class="form-group"><label>Services</label><input name="services" placeholder="Mentoring, testing, prototyping"></div><div class="form-group"><label>CSR Focus Areas</label><input name="csr_focus_areas" placeholder="Water, education, rural development"></div></div>
+    <div class="form-group"><label>Available Resources</label><input name="available_resources" placeholder="Hardware, labs, cloud, experts"></div>
+    <div class="form-row"><div class="form-group"><label>Password *</label><input name="password" type="password" required></div><div class="form-group"><label>Confirm Password *</label><input name="confirm_password" type="password" required></div></div>
+    <button class="btn btn-primary btn-block btn-lg">Create Industry Account</button>
+  </form>
+</div></div>
+{% endblock %}

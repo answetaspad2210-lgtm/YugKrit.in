@@ -1,0 +1,153 @@
+{% extends "university/_base.html" %}
+{% block title %}{{ project.name }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('university.projects') }}">Projects</a> / {{ project.project_code }}</div>
+<div class="page-header">
+  <div><h1>{{ project.name }}</h1><p>{{ project.challenge.title }}</p></div>
+  <span class="badge {{ 'badge-success' if project.status in ['COMPLETED','VERIFIED'] else 'badge-neutral' }}" style="font-size:13px;padding:7px 14px;">{{ project.status }}</span>
+</div>
+
+<div class="tabs" data-tabs>
+  <a class="tab-link {{ 'active' if tab=='overview' }}" href="?tab=overview">Overview</a>
+  <a class="tab-link {{ 'active' if tab=='team' }}" href="?tab=team">Team</a>
+  <a class="tab-link {{ 'active' if tab=='industry' }}" href="?tab=industry">Industry Support</a>
+  <a class="tab-link {{ 'active' if tab=='milestones' }}" href="?tab=milestones">Milestones</a>
+  <a class="tab-link {{ 'active' if tab=='tasks' }}" href="?tab=tasks">Tasks</a>
+  <a class="tab-link {{ 'active' if tab=='documents' }}" href="?tab=documents">Documents</a>
+  <a class="tab-link {{ 'active' if tab=='impact' }}" href="?tab=impact">Impact</a>
+</div>
+
+{% if tab == 'overview' %}
+  <div class="grid-2">
+    <div class="card card-body">
+      <h3>Project Details</h3>
+      <div class="detail-list">
+        <div class="row"><span class="label">Objective</span><span class="value">{{ project.objective or '—' }}</span></div>
+        <div class="row"><span class="label">Expected Outcome</span><span class="value">{{ project.expected_outcome or '—' }}</span></div>
+        <div class="row"><span class="label">Start Date</span><span class="value">{{ project.start_date or '—' }}</span></div>
+        <div class="row"><span class="label">Expected Completion</span><span class="value">{{ project.expected_completion or '—' }}</span></div>
+        <div class="row"><span class="label">Faculty Mentor</span><span class="value">{{ project.faculty_mentor.user.full_name if project.faculty_mentor else 'Not assigned' }}</span></div>
+      </div>
+    </div>
+    <div class="card card-body">
+      <h3>Progress</h3>
+      {% for label, val in [('Research', project.research_progress), ('Design', project.design_progress), ('Prototype', project.prototype_progress), ('Testing', project.testing_progress), ('Validation', project.validation_progress)] %}
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span>{{ label }}</span><span>{{ val }}%</span></div>
+        <div class="progress-bar-track"><div class="progress-bar-fill" style="width:{{ val }}%;"></div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+{% elif tab == 'industry' %}
+  {% for collaboration in project.collaborations if collaboration.status == 'ACTIVE' %}
+  <div class="card card-body"><h3>{{ collaboration.industry.organization.name }}</h3><p>{{ collaboration.role }}</p><span class="badge badge-success">{{ collaboration.status }}</span></div>
+  {% else %}<div class="empty-state">No approved industry partner for this project yet.</div>{% endfor %}
+
+{% elif tab == 'team' %}
+  {% if project.teams %}
+    {% for team in project.teams %}
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><h3 style="margin:0;font-size:15px;">{{ team.team_name }}</h3><span class="badge badge-neutral">{{ team.members|length }} members</span></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Name</th><th>Registration No.</th><th>College Email</th><th>Role</th></tr></thead>
+          <tbody>
+            {% for m in team.members %}
+            <tr>
+              <td data-label="Name" class="row-title">{{ m.student.full_name }}</td>
+              <td data-label="Reg No">{{ m.student.registration_number }}</td>
+              <td data-label="Email">{{ m.student.college_email }}</td>
+              <td data-label="Role"><span class="badge badge-info">{{ m.role_in_team }}</span></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="card card-body">
+    <h3>Add Team Members</h3>
+    <p style="font-size:12.5px;color:var(--ink-500);margin-bottom:14px;">Search is automatic: if a student with the same
+      institution + registration number already exists, they are linked instantly. Otherwise an invitation is created.</p>
+    <form method="post" action="{{ url_for('university.add_team', project_id=project.id) }}">
+      <div class="form-group"><label>Team Name</label><input type="text" name="team_name" value="{{ project.name }} Team"></div>
+      <div id="team-members-container"></div>
+      <button type="button" id="add-member-btn" class="btn btn-outline btn-sm" style="margin-bottom:16px;"><i class="fa-solid fa-plus"></i> Add Another Member</button>
+      <button type="submit" class="btn btn-primary btn-block">Save Team</button>
+    </form>
+  </div>
+
+{% elif tab == 'milestones' %}
+  {% for m in project.milestones|sort(attribute='sequence') %}
+  <div class="card" style="margin-bottom:14px;">
+    <div class="card-body" style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:220px;">
+        <h4 style="margin-bottom:4px;">{{ loop.index }}. {{ m.title }}</h4>
+        <p style="font-size:12.5px;color:var(--ink-500);margin:0;">Owner: {{ m.owner.full_name if m.owner else 'Unassigned' }}
+          {% if m.reviewer_comment %}<br>Reviewer note: {{ m.reviewer_comment }}{% endif %}</p>
+      </div>
+      <span class="badge {{ 'badge-success' if m.status=='COMPLETED' else ('badge-warning' if m.status in ['SUBMITTED','UNDER_REVIEW'] else 'badge-neutral') }}">{{ m.status.replace('_',' ') }}</span>
+      <form method="post" action="{{ url_for('university.update_milestone', milestone_id=m.id) }}" data-milestone-status-form style="display:flex;gap:8px;align-items:center;">
+        <select name="status">
+          {% for s in ['NOT_STARTED','IN_PROGRESS','SUBMITTED','UNDER_REVIEW','APPROVED','CHANGES_REQUESTED','COMPLETED'] %}
+            <option value="{{ s }}" {{ 'selected' if m.status==s }}>{{ s.replace('_',' ').title() }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-outline btn-sm">Update</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+
+{% elif tab == 'tasks' %}
+  <div class="card">
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Task</th><th>Assigned To</th><th>Due</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for t in project.tasks %}
+          <tr>
+            <td data-label="Task" class="row-title">{{ t.title }}</td>
+            <td data-label="Assigned To">{{ t.assigned_to.full_name if t.assigned_to else '—' }}</td>
+            <td data-label="Due">{{ t.due_date or '—' }}</td>
+            <td data-label="Status"><span class="badge badge-neutral">{{ t.status }}</span></td>
+          </tr>
+          {% else %}<tr><td colspan="4">No tasks created yet. Tasks can be added per-milestone as the project progresses.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% elif tab == 'documents' %}
+  <div class="card card-body">
+    {% set has_docs = false %}
+    {% for m in project.milestones %}{% for d in m.deliverables %}{% set has_docs = true %}
+      <div class="file-item"><span><i class="fa-solid fa-file"></i> {{ d.file_name }}</span><span style="color:var(--ink-500);font-size:12px;">{{ m.title }}</span></div>
+    {% endfor %}{% endfor %}
+    {% if not has_docs %}<div class="empty-state"><i class="fa-solid fa-folder-open"></i>No documents uploaded yet.</div>{% endif %}
+  </div>
+
+{% elif tab == 'impact' %}
+  <div class="card card-body">
+    <h3>Project Impact</h3>
+    <div class="detail-list">
+      <div class="row"><span class="label">People Impacted</span><span class="value">{{ project.impact.people_impacted if project.impact else 0 }}</span></div>
+      <div class="row"><span class="label">Summary</span><span class="value">{{ project.impact.summary if project.impact else '—' }}</span></div>
+    </div>
+    {% if project.community_validations %}
+      <h4 style="margin-top:18px;">Community Validations</h4>
+      {% for v in project.community_validations %}
+        <div style="padding:10px 0;border-bottom:1px dashed var(--border-color);font-size:13px;">
+          <strong>Rating: {{ v.rating }}/5</strong><br>{{ v.feedback }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endif %}
+
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/projects.js') }}"></script>{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "government/_base.html" %}
+{% block title %}ULBs & NGOs — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>ULBs & NGOs</h1><p>Merged civic-body dashboard — Urban Local Bodies and NGOs share identical features.</p></div></div>
+
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-header"><h3 style="margin:0;font-size:15px;">Urban Local Bodies (ULBs)</h3></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Type</th><th>District</th><th>Officer</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for u in ulbs %}
+        <tr>
+          <td data-label="Name" class="row-title">{{ u.organization.name }}</td>
+          <td data-label="Type">{{ u.ulb_type or '—' }}</td>
+          <td data-label="District">{{ u.organization.district or '—' }}</td>
+          <td data-label="Officer">{{ u.authorized_officer }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if u.organization.status=='VERIFIED' else ('badge-danger' if u.organization.status=='REJECTED' else 'badge-warning') }}">{{ u.organization.status }}</span></td>
+          <td data-label="Actions">
+            {% if u.organization.status in ['PENDING','UNDER_REVIEW'] %}
+            <form method="post" action="{{ url_for('government.verify_organization', org_id=u.organization.id) }}" style="display:inline;">
+              <button name="decision" value="approve" class="btn btn-success btn-sm" type="submit">Approve</button>
+              <button name="decision" value="reject" class="btn btn-danger btn-sm" type="submit">Reject</button>
+            </form>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% else %}<tr><td colspan="6">No ULBs registered yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:20px;">
+  <div class="card-header"><h3 style="margin:0;font-size:15px;">NGOs</h3></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Reg. No.</th><th>District</th><th>Representative</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for n in ngos_merged %}
+        <tr>
+          <td data-label="Name" class="row-title">{{ n.organization.name }}</td>
+          <td data-label="Reg No">{{ n.registration_number or '—' }}</td>
+          <td data-label="District">{{ n.organization.district or '—' }}</td>
+          <td data-label="Representative">{{ n.authorized_officer }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if n.organization.status=='VERIFIED' else ('badge-danger' if n.organization.status=='REJECTED' else 'badge-warning') }}">{{ n.organization.status }}</span></td>
+          <td data-label="Actions">
+            {% if n.organization.status in ['PENDING','UNDER_REVIEW'] %}
+            <form method="post" action="{{ url_for('government.verify_organization', org_id=n.organization.id) }}" style="display:inline;">
+              <button name="decision" value="approve" class="btn btn-success btn-sm" type="submit">Approve</button>
+              <button name="decision" value="reject" class="btn btn-danger btn-sm" type="submit">Reject</button>
+            </form>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+        {% else %}<tr><td colspan="6">No NGOs registered yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if ngos_legacy %}
+<div class="card">
+  <div class="card-header"><h3 style="margin:0;font-size:15px;">Legacy NGO Accounts</h3><span class="badge badge-neutral">Pre-merge</span></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Reg. No.</th><th>District</th><th>Representative</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for n in ngos_legacy %}
+        <tr>
+          <td data-label="Name" class="row-title">{{ n.organization.name }}</td>
+          <td data-label="Reg No">{{ n.registration_number or '—' }}</td>
+          <td data-label="District">{{ n.organization.district or '—' }}</td>
+          <td data-label="Representative">{{ n.authorized_rep }}</td>
+          <td data-label="Status"><span class="badge badge-neutral">{{ n.organization.status }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

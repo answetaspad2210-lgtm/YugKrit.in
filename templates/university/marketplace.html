@@ -1,0 +1,45 @@
+{% extends "university/_base.html" %}
+{% block title %}Challenge Marketplace — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Challenge Marketplace</h1><p>Browse government-verified societal challenges and apply.</p></div></div>
+
+<form class="filters-bar" data-filter-form method="get">
+  <select name="category">
+    <option value="">All Categories</option>
+    {% for c in categories %}<option value="{{ c.name }}" {{ 'selected' if request.args.get('category')==c.name }}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <input type="text" name="district" placeholder="District" value="{{ request.args.get('district','') }}">
+  <button class="btn btn-outline btn-sm" type="submit">Filter</button>
+</form>
+
+{% if challenges %}
+<div class="grid-3">
+  {% for c in challenges %}
+  <div class="challenge-card">
+    <div class="challenge-card-top">
+      <span class="badge badge-accent">{{ c.category.name if c.category else 'General' }}</span>
+      <span class="badge {{ 'badge-danger' if c.priority_score >= 70 else 'badge-warning' }}">Priority {{ c.priority_score }}</span>
+    </div>
+    <h4>{{ c.title }}</h4>
+    <p style="font-size:13px;color:var(--ink-500);">{{ c.description[:100] }}{% if c.description and c.description|length > 100 %}…{% endif %}</p>
+    <div class="challenge-meta">
+      <span><i class="fa-solid fa-location-dot"></i> {{ c.location.district if c.location else '—' }}</span>
+      <span><i class="fa-solid fa-users"></i> {{ c.affected_population }}</span>
+    </div>
+    {% if c.required_skills %}
+    <div class="skills-tags">
+      {% for s in c.required_skills.split(',')[:4] %}<span class="tag">{{ s.strip() }}</span>{% endfor %}
+    </div>
+    {% endif %}
+    <div style="display:flex;gap:8px;">
+      <a href="{{ url_for('university.challenge_detail', challenge_id=c.id) }}" class="btn btn-primary btn-sm" style="flex:1;">View & Apply</a>
+      <button class="btn btn-outline btn-sm btn-icon" data-save-challenge><i class="fa-regular fa-bookmark"></i></button>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><i class="fa-solid fa-inbox"></i>No verified challenges match your filters right now.</div>
+{% endif %}
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/challenges.js') }}"></script>{% endblock %}

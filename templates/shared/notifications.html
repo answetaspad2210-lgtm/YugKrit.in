@@ -1,0 +1,36 @@
+{% extends "shared/dashboard_base.html" %}
+{% block sidebar_menu %}
+  {% set role = current_user.role_name() %}
+  {% if role == 'GOVT_IT_CELL_ADMIN' %}{% include "shared/_sidebar_itcell.html" %}
+  {% elif 'GOVERNMENT' in role %}{% include "shared/_sidebar_government.html" %}
+  {% elif role in ['UNIVERSITY_ADMIN','FACULTY'] %}{% include "shared/_sidebar_university.html" %}
+  {% elif role in ['ULB_ADMIN','NGO_ADMIN'] %}{% include "shared/_sidebar_ulb.html" %}
+  {% elif role == 'CITIZEN' %}{% include "shared/_sidebar_citizen.html" %}
+  {% else %}{% include "shared/_sidebar_student.html" %}{% endif %}
+{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div>
+    <h1>Notifications</h1>
+    <p>All updates about your challenges, projects, and achievements.</p>
+  </div>
+  <form action="{{ url_for('notifications.mark_all_read') }}" method="post">
+    <button class="btn btn-outline" type="submit"><i class="fa-solid fa-check-double"></i> Mark all as read</button>
+  </form>
+</div>
+
+<div class="card">
+  {% if notifications %}
+    {% for note in notifications %}
+      <a class="dropdown-item {{ '' if note.is_read else 'unread' }}" style="display:block;padding:16px 20px;"
+         href="{{ url_for('notifications.mark_read', notification_id=note.id) }}">
+        <div class="item-title">{{ note.title }}</div>
+        <div>{{ note.message }}</div>
+        <div class="item-time">{{ note.created_at.strftime('%d %b %Y, %I:%M %p') }}</div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state"><i class="fa-regular fa-bell-slash"></i>No notifications yet.</div>
+  {% endif %}
+</div>
+{% endblock %}

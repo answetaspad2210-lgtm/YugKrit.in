@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}Register University — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card wide">
+    <div class="auth-logo">
+      <h2>University Registration</h2>
+      <p style="color:var(--ink-500);font-size:14px;">Complete all steps to submit for government verification.</p>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" data-wizard>
+      <div class="stepper">
+        <div class="stepper-step active"><div class="stepper-circle">1</div><div class="stepper-label">Institution</div></div>
+        <div class="stepper-line"></div>
+        <div class="stepper-step"><div class="stepper-circle">2</div><div class="stepper-label">Representative</div></div>
+        <div class="stepper-line"></div>
+        <div class="stepper-step"><div class="stepper-circle">3</div><div class="stepper-label">Documents</div></div>
+      </div>
+
+      <!-- STEP 1: Institution Details -->
+      <div class="form-step active">
+        <div class="form-group"><label>Institution Name *</label><input type="text" name="institution_name" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Institution Type</label>
+            <select name="institution_type">
+              <option>State University</option><option>Central University</option>
+              <option>Deemed University</option><option>Private University</option>
+              <option>Autonomous College</option><option>Affiliated College</option>
+            </select>
+          </div>
+          <div class="form-group"><label>AISHE Code</label><input type="text" name="aishe_code"></div>
+        </div>
+        <div class="form-group"><label>Affiliating University</label><input type="text" name="affiliating_university"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Official Website</label><input type="url" name="website" placeholder="https://"></div>
+          <div class="form-group"><label>Official Email *</label><input type="email" name="official_email" required></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Phone</label><input type="text" name="phone"></div>
+          <div class="form-group"><label>District</label><input type="text" name="district"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>State</label><input type="text" name="state"></div>
+          <div class="form-group"><label>Address</label><input type="text" name="address"></div>
+        </div>
+        <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Representative</button>
+      </div>
+
+      <!-- STEP 2: Authorized Representative -->
+      <div class="form-step">
+        <div class="form-group"><label>Representative Name *</label><input type="text" name="rep_name" required></div>
+        <div class="form-row">
+          <div class="form-group"><label>Designation</label><input type="text" name="rep_designation" placeholder="Dean R&D, Registrar..."></div>
+          <div class="form-group"><label>Official Email</label><input type="email" name="rep_email"></div>
+        </div>
+        <div class="form-group"><label>Phone (used for login — password or OTP) *</label><input type="tel" name="rep_phone" required placeholder="9876543210"></div>
+        <div class="form-group"><label>Set Login Password *</label><input type="password" name="password" id="uni-password" required minlength="6"></div>
+        <div class="form-group"><label>Confirm Password *</label><input type="password" name="confirm_password" required minlength="6" data-match="uni-password"></div>
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+          <button type="button" class="btn btn-primary btn-block" data-wizard-next>Next: Documents</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: Documents -->
+      <div class="form-step">
+        <div class="form-group">
+          <label>Recognition Certificate</label>
+          <div class="file-drop" data-file-drop="recognition_certificate" data-file-list="rc-list">
+            <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag file (PDF, JPG, PNG)</p>
+          </div>
+          <input type="file" id="recognition_certificate" name="recognition_certificate" accept=".pdf,.jpg,.jpeg,.png" hidden>
+          <div class="file-list" id="rc-list"></div>
+        </div>
+        <div class="form-group">
+          <label>Registration Proof</label>
+          <div class="file-drop" data-file-drop="registration_proof" data-file-list="rp-list">
+            <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag file (PDF, JPG, PNG)</p>
+          </div>
+          <input type="file" id="registration_proof" name="registration_proof" accept=".pdf,.jpg,.jpeg,.png" hidden>
+          <div class="file-list" id="rp-list"></div>
+        </div>
+        <div class="form-group">
+          <label>Authorization Letter</label>
+          <div class="file-drop" data-file-drop="authorization_letter" data-file-list="al-list">
+            <i class="fa-solid fa-cloud-arrow-up"></i><p>Click or drag file (PDF, JPG, PNG)</p>
+          </div>
+          <input type="file" id="authorization_letter" name="authorization_letter" accept=".pdf,.jpg,.jpeg,.png" hidden>
+          <div class="file-list" id="al-list"></div>
+        </div>
+        <div style="display:flex;gap:10px;">
+          <button type="button" class="btn btn-outline btn-block" data-wizard-prev>Back</button>
+          <button type="submit" class="btn btn-accent btn-block">Submit Registration</button>
+        </div>
+      </div>
+    </form>
+
+    <div class="auth-links">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/auth.js') }}"></script>{% endblock %}

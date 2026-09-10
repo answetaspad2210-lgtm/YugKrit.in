@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Verify OTP — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <i class="fa-solid fa-shield-halved" style="font-size:30px;color:var(--color-primary);"></i>
+      <h2 style="margin-top:10px;">Enter OTP</h2>
+      <p style="color:var(--ink-500);font-size:14px;">Sent to <strong>{{ masked_phone }}</strong></p>
+    </div>
+
+    <form method="post">
+      <div class="form-group">
+        <label>6-Digit OTP</label>
+        <input type="text" name="otp_code" required maxlength="6" pattern="\d{6}" inputmode="numeric"
+               placeholder="••••••" autofocus style="letter-spacing:6px;font-size:20px;text-align:center;">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Verify & Log In</button>
+    </form>
+
+    <form method="post" action="{{ url_for('auth.login_otp_resend') }}" style="margin-top:14px;">
+      <button type="submit" class="btn btn-outline btn-block btn-sm">
+        <i class="fa-solid fa-rotate"></i> Resend OTP
+      </button>
+    </form>
+
+    <div class="auth-links">
+      Wrong number? <a href="{{ url_for('auth.login_otp_request') }}">Start over</a><br><br>
+      Prefer email and password? <a href="{{ url_for('auth.login') }}">Use email + password</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ app_name }} Dashboard{% endblock %}</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<div class="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="toast {{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<div class="dashboard-shell">
+  <div class="sidebar-overlay"></div>
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo" class="brand-mark">
+      <div class="sidebar-brand-text">YugKrit<small>From Problems to Solutions</small></div>
+    </div>
+    <div class="sidebar-role-tag">
+      <i class="fa-solid fa-shield-halved"></i> {{ current_user.role_name().replace('_',' ') if current_user else '' }}
+    </div>
+    <nav class="sidebar-nav">
+      {% block sidebar_menu %}{% endblock %}
+    </nav>
+  </aside>
+
+  <div class="dashboard-main">
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="hamburger"><i class="fa-solid fa-bars"></i></button>
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search challenges, projects, students...">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" id="notif-bell" data-dropdown-toggle="notif-menu">
+          <i class="fa-regular fa-bell"></i>
+          {% if unread_notifications > 0 %}<span class="notif-badge">{{ unread_notifications }}</span>{% endif %}
+        </button>
+        <div class="dropdown-menu" id="notif-menu">
+          <div class="dropdown-header">
+            Notifications
+            <form action="{{ url_for('notifications.mark_all_read') }}" method="post" style="margin:0;">
+              <button class="btn btn-sm btn-outline" type="submit" style="padding:2px 8px;font-size:11px;">Mark all read</button>
+            </form>
+          </div>
+          <div class="dropdown-list">
+            {% if current_user %}
+              {% for note in (current_user.notifications | sort(attribute='created_at', reverse=True))[:8] %}
+                <a class="dropdown-item {{ '' if note.is_read else 'unread' }}" href="{{ url_for('notifications.mark_read', notification_id=note.id) }}">
+                  <div class="item-title">{{ note.title }}</div>
+                  <div>{{ note.message }}</div>
+                  <div class="item-time">{{ note.created_at.strftime('%d %b, %I:%M %p') }}</div>
+                </a>
+              {% else %}
+                <div class="dropdown-item">No notifications yet.</div>
+              {% endfor %}
+            {% else %}
+              <div class="dropdown-item">No notifications yet.</div>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="profile-chip" data-dropdown-toggle="profile-menu">
+          <div class="avatar">{{ current_user.full_name[:1] if current_user else '?' }}</div>
+          <div>
+            <div class="profile-chip-name">{{ current_user.full_name if current_user else '' }}</div>
+            <div class="profile-chip-role">{{ current_user.role_name().replace('_',' ').title() if current_user else '' }}</div>
+          </div>
+          <i class="fa-solid fa-chevron-down" style="font-size:11px;color:var(--ink-500);"></i>
+        </div>
+        <div class="dropdown-menu" id="profile-menu">
+          <div class="dropdown-header">My Account</div>
+          <a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      {% block dashboard_content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script src="{{ url_for('static', filename='js/maps.js') }}"></script>
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

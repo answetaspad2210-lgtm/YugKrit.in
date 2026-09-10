@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Explore Challenges — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section" style="padding-top:40px;">
+  <div class="container">
+    <div class="page-header">
+      <div><h1>Explore Verified Challenges</h1><p>Browse verified problems by state, district, and category.</p></div>
+    </div>
+
+    <form class="filters-bar" data-filter-form method="get">
+      <select name="category">
+        <option value="">All Categories</option>
+        {% for c in categories %}
+          <option value="{{ c.name }}" {{ 'selected' if request.args.get('category')==c.name }}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+      <input type="text" name="district" placeholder="District" value="{{ request.args.get('district','') }}">
+      <select name="state">
+        <option value="">All States</option>
+        {% for state in states %}<option value="{{ state }}" {{ 'selected' if request.args.get('state')==state }}>{{ state }}</option>{% endfor %}
+      </select>
+      <button class="btn btn-outline btn-sm" type="submit">Filter</button>
+    </form>
+
+    {% if challenges %}
+    <div class="grid-3">
+      {% for c in challenges %}
+      <div class="challenge-card">
+        <div class="challenge-card-top">
+          <span class="badge badge-accent">{{ c.category.name if c.category else 'General' }}</span>
+          <span class="badge {{ 'badge-danger' if c.priority_score >= 70 else 'badge-warning' }}">Priority {{ c.priority_score }}</span>
+        </div>
+        <h4>{{ c.title }}</h4>
+        <p style="font-size:13px;color:var(--ink-500);">{{ c.description[:110] }}{% if c.description and c.description|length > 110 %}…{% endif %}</p>
+        <div class="challenge-meta">
+          <span><i class="fa-solid fa-location-dot"></i> {{ c.location.district if c.location else '—' }}</span>
+          <span><i class="fa-solid fa-users"></i> {{ c.affected_population }} affected</span>
+          <span class="badge badge-neutral">{{ c.status }}</span>
+        </div>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline btn-sm">Login to View & Apply</a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+      <div class="empty-state"><i class="fa-solid fa-inbox"></i>No challenges match your filters yet.</div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

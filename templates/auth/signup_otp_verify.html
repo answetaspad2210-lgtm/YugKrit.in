@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Verify Phone — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo" class="auth-logo-image">
+      <h2>Verify your phone</h2>
+      <p class="auth-help">Enter the 6-digit code sent to WhatsApp number <strong>{{ masked_phone }}</strong> to activate your account.</p>
+    </div>
+    {% if otp_dev_mode %}<div class="demo-banner"><strong>Development mode:</strong> the OTP appears in the message above because no WhatsApp provider is configured.</div>{% endif %}
+    <form method="post">
+      <div class="form-group">
+        <label>6-Digit OTP</label>
+        <input type="text" name="otp_code" required maxlength="6" pattern="\d{6}" inputmode="numeric" placeholder="000000" autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Verify Phone & Activate Account</button>
+    </form>
+    <form method="post" action="{{ url_for('auth.signup_otp_resend') }}" class="otp-resend-form">
+      <button type="submit" class="btn btn-outline btn-block btn-sm"><i class="fa-solid fa-rotate"></i> Resend OTP</button>
+    </form>
+    <div class="auth-links">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}

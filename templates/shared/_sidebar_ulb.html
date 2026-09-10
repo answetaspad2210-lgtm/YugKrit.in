@@ -1,0 +1,5 @@
+<a href="{{ url_for('ulb.overview') }}" class="{{ 'active' if request.endpoint=='ulb.overview' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('ulb.submit_challenge') }}" class="{{ 'active' if request.endpoint=='ulb.submit_challenge' }}"><i class="fa-solid fa-square-plus"></i> Submit Challenge</a>
+<a href="{{ url_for('ulb.my_challenges') }}" class="{{ 'active' if request.endpoint in ['ulb.my_challenges','ulb.challenge_detail'] }}"><i class="fa-solid fa-list"></i> My Challenges</a>
+<a href="{{ url_for('ulb.projects') }}" class="{{ 'active' if request.endpoint=='ulb.projects' }}"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>

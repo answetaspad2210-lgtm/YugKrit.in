@@ -1,0 +1,21 @@
+{% extends "ulb/_base.html" %}
+{% block title %}Projects — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Projects</h1><p>University-led projects solving your submitted challenges.</p></div></div>
+
+{% if projects %}
+<div class="grid-3">
+  {% for p in projects %}
+  <div class="card card-body">
+    <span class="badge {{ 'badge-success' if p.status in ['COMPLETED','VERIFIED'] else 'badge-neutral' }}">{{ p.status }}</span>
+    <h4 style="margin-top:10px;">{{ p.name }}</h4>
+    <p style="font-size:13px;color:var(--ink-500);">{{ p.university.organization.name }}</p>
+    <div class="progress-bar-track" style="margin:10px 0;"><div class="progress-bar-fill" style="width:{{ p.testing_progress }}%;"></div></div>
+    <a href="{{ url_for('ulb.challenge_detail', challenge_id=p.challenge_id) }}" class="btn btn-outline btn-sm btn-block">View Challenge</a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state"><i class="fa-solid fa-diagram-project"></i>No projects yet — once a university accepts your challenge, it will appear here.</div>
+{% endif %}
+{% endblock %}

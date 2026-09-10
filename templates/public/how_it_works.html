@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}How It Works — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:900px;">
+    <div class="section-title" style="margin-bottom:50px;">
+      <h1>How YugKrit Works</h1>
+      <p>A transparent lifecycle from real-world problem to verified, certified solution.</p>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item done">
+        <h4>1. Problem Submission</h4>
+        <p>A ULB or NGO submits a real societal problem with location, evidence, and affected population data.</p>
+      </div>
+      <div class="timeline-item done">
+        <h4>2. AI Analysis & Government Verification</h4>
+        <p>The problem is auto-categorized and prioritized by YugKrit's AI engine, then reviewed and verified by a government officer.</p>
+      </div>
+      <div class="timeline-item done">
+        <h4>3. University Assignment</h4>
+        <p>Government assigns the verified challenge to a matched university, or universities apply from the open marketplace.</p>
+      </div>
+      <div class="timeline-item done">
+        <h4>4. Project & Team Formation</h4>
+        <p>The university creates a project and builds a student team — each student linked uniquely by
+          institution + registration number, so no duplicate profiles are ever created.</p>
+      </div>
+      <div class="timeline-item pending">
+        <h4>5. Milestones: Research → Design → Prototype → Testing → Validation</h4>
+        <p>The team executes through tracked milestones, submitting deliverables for faculty review at each stage.</p>
+      </div>
+      <div class="timeline-item pending">
+        <h4>6. Community Validation & Verification</h4>
+        <p>The ULB/NGO and government verify the delivered solution and its real-world impact.</p>
+      </div>
+      <div class="timeline-item pending">
+        <h4>7. Achievements, Certificates & Growth Profile</h4>
+        <p>On verified completion, achievements and certificates are generated automatically, and every
+          student's permanent Innovation Growth Profile is updated.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

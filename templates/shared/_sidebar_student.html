@@ -1,0 +1,7 @@
+<a href="{{ url_for('student.overview') }}" class="{{ 'active' if request.endpoint=='student.overview' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('student.problems') }}" class="{{ 'active' if request.endpoint in ['student.problems','student.problem_detail'] }}"><i class="fa-solid fa-magnifying-glass"></i> Problem Explorer</a>
+<a href="{{ url_for('student.projects') }}" class="{{ 'active' if request.endpoint in ['student.projects','student.project_workspace'] }}"><i class="fa-solid fa-diagram-project"></i> My Projects</a>
+<a href="{{ url_for('student.achievements') }}" class="{{ 'active' if request.endpoint=='student.achievements' }}"><i class="fa-solid fa-award"></i> Achievements</a>
+<a href="{{ url_for('student.certificates') }}" class="{{ 'active' if request.endpoint=='student.certificates' }}"><i class="fa-solid fa-certificate"></i> Certificates</a>
+<a href="{{ url_for('student.profile_view') }}" class="{{ 'active' if request.endpoint=='student.profile_view' }}"><i class="fa-solid fa-id-card"></i> Growth Profile</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>

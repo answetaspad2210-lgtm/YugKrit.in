@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Login — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo" class="auth-logo-image">
+      <h2 style="margin-top:10px;">Welcome back</h2>
+      <p style="color:var(--ink-500);font-size:14px;">Log in to your YugKrit dashboard</p>
+    </div>
+
+    <div class="demo-banner">
+      <strong>Development demo accounts</strong> (use the listed password, or the phone number with <a href="{{ url_for('auth.login_otp_request') }}">OTP login</a>)
+      <table style="width:100%;margin-top:8px;font-size:12.5px;border-collapse:collapse;">
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-building-shield"></i> Government IT Cell</td><td style="text-align:right;"><code>itcell@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritIT@2026</code></td><td style="text-align:right;"><code>9810000001</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-landmark"></i> Government</td><td style="text-align:right;"><code>gov@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritGov@2026</code></td><td style="text-align:right;"><code>9810000002</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-graduation-cap"></i> University</td><td style="text-align:right;"><code>university@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritUni@2026</code></td><td style="text-align:right;"><code>9810000003</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-chalkboard-user"></i> Faculty</td><td style="text-align:right;"><code>faculty@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritFac@2026</code></td><td style="text-align:right;"><code>9810000004</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-city"></i> ULB</td><td style="text-align:right;"><code>ulb@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritULB@2026</code></td><td style="text-align:right;"><code>9810000005</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-hand-holding-heart"></i> NGO</td><td style="text-align:right;"><code>ngo@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritNGO@2026</code></td><td style="text-align:right;"><code>9810000006</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-user-graduate"></i> Student</td><td style="text-align:right;"><code>student@college.local</code></td><td style="text-align:right;"><code>YugKritStu@2026</code></td><td style="text-align:right;"><code>9810000007</code></td></tr>
+        <tr><td style="padding:2px 0;"><i class="fa-solid fa-id-card"></i> Citizen</td><td style="text-align:right;"><code>citizen@yugkrit.local</code></td><td style="text-align:right;"><code>YugKritCit@2026</code></td><td style="text-align:right;"><code>9876500000</code></td></tr>
+      </table>
+    </div>
+
+    <div class="login-mode-tabs">
+      <span class="login-mode-tab active">Email + Password</span>
+      <a href="{{ url_for('auth.login_otp_request') }}" class="login-mode-tab">Phone + OTP</a>
+    </div>
+
+    <form method="post">
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Log In</button>
+    </form>
+
+    <div class="auth-links">
+      Prefer your phone? <a href="{{ url_for('auth.login_otp_request') }}">Log in with phone + OTP</a><br><br>
+      Don't have an account? <a href="{{ url_for('auth.register_landing') }}">Join YugKrit</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

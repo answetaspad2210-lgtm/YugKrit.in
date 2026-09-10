@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Register as Citizen — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><h2>Join as a Citizen</h2><p style="color:var(--ink-500);font-size:14px;">Post real problems in your area and track them through to a verified solution.</p></div>
+
+    <div class="demo-banner">
+      <strong>Phone verification required.</strong> We will send a one-time password to your
+      mobile number before activating your citizen account.
+    </div>
+
+    <form method="post">
+      <div class="form-group"><label>Full Name *</label><input type="text" name="full_name" required></div>
+      <div class="form-group"><label>Email *</label><input type="email" name="email" required></div>
+      <div class="form-group"><label>Phone (used for login — password or OTP) *</label><input type="tel" name="phone" required placeholder="9876543210"></div>
+      <div class="form-group"><label>Address</label><input type="text" name="address"></div>
+      <div class="form-row">
+        <div class="form-group"><label>City</label><input type="text" name="city"></div>
+        <div class="form-group"><label>District</label><input type="text" name="district"></div>
+      </div>
+      <div class="form-group"><label>State</label><input type="text" name="state"></div>
+      <div class="form-group"><label>Set Password *</label><input type="password" name="password" id="citizen-password" required minlength="6"></div>
+      <div class="form-group"><label>Confirm Password *</label><input type="password" name="confirm_password" required minlength="6" data-match="citizen-password"></div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg">Create My Citizen Account</button>
+    </form>
+    <div class="auth-links">Already registered? <a href="{{ url_for('auth.login') }}">Log in</a></div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/auth.js') }}"></script>{% endblock %}

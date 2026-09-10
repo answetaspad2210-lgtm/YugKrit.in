@@ -1,0 +1,8 @@
+{% extends "shared/dashboard_base.html" %}
+{% block sidebar_menu %}
+  {% if current_user and current_user.role_name() == 'GOVT_IT_CELL_ADMIN' %}
+    {% include "shared/_sidebar_itcell.html" %}
+  {% else %}
+    {% include "shared/_sidebar_government.html" %}
+  {% endif %}
+{% endblock %}

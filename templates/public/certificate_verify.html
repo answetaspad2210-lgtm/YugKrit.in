@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Certificate Verification — {{ app_name }}{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width:600px;">
+    {% if cert %}
+      <div class="certificate-card">
+        <div class="cert-seal"><i class="fa-solid fa-certificate"></i></div>
+        <h2>YugKrit Innovation Certificate</h2>
+        <p style="color:var(--ink-500);margin-bottom:20px;">This certificate is verified as authentic.</p>
+        <div class="detail-list" style="text-align:left;">
+          <div class="row"><span class="label">Student Name</span><span class="value">{{ cert.student.full_name }}</span></div>
+          <div class="row"><span class="label">Project</span><span class="value">{{ cert.project.name }}</span></div>
+          <div class="row"><span class="label">Role</span><span class="value">{{ cert.role_in_project }}</span></div>
+          <div class="row"><span class="label">University</span><span class="value">{{ cert.project.university.organization.name }}</span></div>
+          <div class="row"><span class="label">Faculty Mentor</span><span class="value">{{ cert.project.faculty_mentor.user.full_name if cert.project.faculty_mentor else 'N/A' }}</span></div>
+          <div class="row"><span class="label">Issued Date</span><span class="value">{{ cert.issued_date.strftime('%d %b %Y') if cert.issued_date }}</span></div>
+        </div>
+        <p style="margin-top:22px;">Certificate ID: <span class="certificate-id">{{ cert.certificate_id }}</span></p>
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <i class="fa-solid fa-circle-xmark" style="color:var(--color-danger);"></i>
+        <h3>Certificate Not Found</h3>
+        <p>No certificate matches ID <strong>{{ certificate_id }}</strong>. Please check the ID and try again.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

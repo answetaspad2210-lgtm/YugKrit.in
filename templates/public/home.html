@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="hero">
+  <div class="hero-slideshow" data-slideshow role="region" aria-roledescription="carousel" aria-label="YugKrit in action">
+    <div class="hero-slides">
+      <div class="hero-slide" data-slide aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/ChatGPT Image Sep 8, 2026, 02_54_46 PM.png') }}" alt="YugKrit official emblem at the center of education, technology and public progress">
+      </div>
+      <div class="hero-slide" data-slide aria-hidden="true">
+        <img src="{{ url_for('static', filename='images/ChatGPT Image Sep 6, 2026, 07_48_39 PM.png') }}" alt="Student looking toward India's future through education and innovation">
+      </div>
+      <div class="hero-slide is-active" data-slide aria-hidden="false">
+        <img src="{{ url_for('static', filename='images/ChatGPT Image Sep 6, 2026, 07_48_12 PM.png') }}" alt="Students and institutions building a connected India through innovation">
+      </div>
+    </div>
+    <div class="hero-shade"></div>
+    <div class="container hero-content">
+      <h1>Real Problems.<br>Real People.<br>Real Solutions.</h1>
+      <p class="lead">YugKrit connects communities, government, universities and students to transform
+        real societal challenges into measurable solutions.</p>
+      <div class="hero-cta">
+        <a href="{{ url_for('public.explore_challenges') }}" class="btn btn-accent btn-lg"><i class="fa-solid fa-magnifying-glass"></i> Explore Challenges</a>
+        <a href="{{ url_for('auth.register_landing') }}" class="btn btn-outline btn-lg" style="background:#fff;"><i class="fa-solid fa-arrow-right-to-bracket"></i> Join YugKrit</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-strip">
+  <div class="container stats-grid">
+    <div><div class="stat-num">{{ stats.challenges }}</div><div class="stat-label">Challenges</div></div>
+    <div><div class="stat-num">{{ stats.universities }}</div><div class="stat-label">Universities</div></div>
+    <div><div class="stat-num">{{ stats.students }}</div><div class="stat-label">Students</div></div>
+    <div><div class="stat-num">{{ stats.projects }}</div><div class="stat-label">Projects</div></div>
+    <div><div class="stat-num">{{ stats.communities }}</div><div class="stat-label">Communities Impacted</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>One platform, four pillars of change</h2>
+      <p>YugKrit is built to be extensible — more dashboards for Industry, Citizens, Mentors and more are on the roadmap.</p>
+    </div>
+    <div class="pillars-grid">
+      <div class="pillar-card">
+        <div class="pillar-icon"><i class="fa-solid fa-landmark"></i></div>
+        <h4>Government</h4>
+        <p>Verifies challenges, assigns problem owners and universities, and tracks impact at scale.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <h4>Universities</h4>
+        <p>Discover verified challenges, build student teams, and mentor real-world projects.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon"><i class="fa-solid fa-city"></i></div>
+        <h4>ULBs / NGOs</h4>
+        <p>Submit ground-level problems with evidence and location, and validate delivered solutions.</p>
+      </div>
+      <div class="pillar-card">
+        <div class="pillar-icon"><i class="fa-solid fa-user-graduate"></i></div>
+        <h4>Students</h4>
+        <p>Build a permanent Innovation Growth Profile with verified projects, skills and certificates.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--surface);">
+  <div class="container">
+    <div class="section-title">
+      <h2>From problem to certificate</h2>
+      <p>Every challenge follows a transparent, verified lifecycle.</p>
+    </div>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="flow-num">1</div>Problem Submitted</div>
+      <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="flow-step"><div class="flow-num">2</div>Govt. Verified</div>
+      <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="flow-step"><div class="flow-num">3</div>University Team</div>
+      <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="flow-step"><div class="flow-num">4</div>Milestones & Testing</div>
+      <div class="flow-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+      <div class="flow-step"><div class="flow-num">5</div>Verified & Certified</div>
+    </div>
+  </div>
+</section>
+
+{% if featured %}
+<section class="section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Featured Challenges</h2>
+      <p>High-priority, verified societal problems currently open for university teams.</p>
+    </div>
+    <div class="grid-3">
+      {% for c in featured %}
+      <div class="challenge-card">
+        <div class="challenge-card-top">
+          <div>
+            <div class="badge badge-accent">{{ c.category.name if c.category else 'General' }}</div>
+          </div>
+          <span class="badge {{ 'badge-danger' if c.priority_score >= 70 else 'badge-warning' }}">Priority {{ c.priority_score }}</span>
+        </div>
+        <h4>{{ c.title }}</h4>
+        <div class="challenge-meta">
+          <span><i class="fa-solid fa-location-dot"></i> {{ c.location.district if c.location else '—' }}</span>
+          <span><i class="fa-solid fa-users"></i> {{ c.affected_population }} affected</span>
+        </div>
+        <a href="{{ url_for('public.explore_challenges') }}" class="btn btn-outline btn-sm">View Details</a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section" style="background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); color:#fff; text-align:center; border-radius: 24px; margin: 0 20px 40px; max-width: 1200px; margin-left:auto; margin-right:auto;">
+  <h2 style="color:#fff;">Ready to turn a problem into a solution?</h2>
+  <p style="color:rgba(255,255,255,.8); margin-bottom:24px;">Join as a Government body, University, ULB/NGO, or Student today.</p>
+  <a href="{{ url_for('auth.register_landing') }}" class="btn btn-accent btn-lg">Join YugKrit</a>
+</section>
+
+{% endblock %}

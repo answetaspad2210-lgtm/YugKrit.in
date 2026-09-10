@@ -1,0 +1,38 @@
+{% extends "ulb/_base.html" %}
+{% block title %}Overview — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header">
+  <div><h1>{{ current_user.organization.name }}</h1><p>Welcome back, {{ current_user.full_name }}.</p></div>
+  <a href="{{ url_for('ulb.submit_challenge') }}" class="btn btn-primary"><i class="fa-solid fa-square-plus"></i> Submit New Challenge</a>
+</div>
+
+{% if current_user.organization.status != 'VERIFIED' %}
+<div class="demo-banner"><strong>Verification pending.</strong> Your organization's status is <strong>{{ current_user.organization.status }}</strong>.</div>
+{% endif %}
+
+<div class="stat-cards">
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-primary-light);color:var(--color-primary);"><i class="fa-solid fa-square-plus"></i></div><div><div class="stat-card-value">{{ stats.submitted }}</div><div class="stat-card-label">Challenges Submitted</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-success-light);color:var(--color-success);"><i class="fa-solid fa-circle-check"></i></div><div><div class="stat-card-value">{{ stats.verified }}</div><div class="stat-card-label">Verified Challenges</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-info-light);color:var(--color-info);"><i class="fa-solid fa-diagram-project"></i></div><div><div class="stat-card-value">{{ stats.active_projects }}</div><div class="stat-card-label">Active Projects</div></div></div>
+  <div class="stat-card"><div class="stat-card-icon" style="background:var(--color-accent-light);color:var(--color-accent);"><i class="fa-solid fa-people-group"></i></div><div><div class="stat-card-value">{{ stats.communities_impacted }}</div><div class="stat-card-label">People Impacted</div></div></div>
+</div>
+
+<div class="card">
+  <div class="card-header"><h3 style="margin:0;font-size:16px;">Recent Challenges</h3><a href="{{ url_for('ulb.my_challenges') }}" class="btn btn-outline btn-sm">View All</a></div>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Challenge</th><th>Category</th><th>Status</th><th>Priority</th></tr></thead>
+      <tbody>
+        {% for c in my_challenges %}
+        <tr onclick="window.location='{{ url_for('ulb.challenge_detail', challenge_id=c.id) }}'" style="cursor:pointer;">
+          <td data-label="Challenge" class="row-title">{{ c.title }}</td>
+          <td data-label="Category">{{ c.category.name if c.category else '—' }}</td>
+          <td data-label="Status"><span class="badge badge-neutral">{{ c.status }}</span></td>
+          <td data-label="Priority"><span class="badge {{ 'badge-danger' if c.priority_score>=70 else 'badge-warning' }}">{{ c.priority_score }}</span></td>
+        </tr>
+        {% else %}<tr><td colspan="4">No challenges submitted yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

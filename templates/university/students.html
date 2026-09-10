@@ -1,0 +1,30 @@
+{% extends "university/_base.html" %}
+{% block title %}Students — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Students</h1><p>Every student profile linked to your institution.</p></div></div>
+
+<div class="filters-bar">
+  <input type="text" data-search-input=".student-row" placeholder="Search by name or registration number...">
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Registration No.</th><th>College Email</th><th>Department</th><th>Status</th><th>Projects</th></tr></thead>
+      <tbody>
+        {% for s in students %}
+        <tr class="student-row">
+          <td data-label="Name" class="row-title">{{ s.full_name }}</td>
+          <td data-label="Reg No">{{ s.registration_number }}</td>
+          <td data-label="Email">{{ s.college_email }}</td>
+          <td data-label="Department">{{ s.department or '—' }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if s.status=='ACTIVE' else 'badge-warning' }}">{{ s.status }}</span></td>
+          <td data-label="Projects">{{ s.team_memberships|length }}</td>
+        </tr>
+        {% else %}<tr><td colspan="6">No students linked yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/students.js') }}"></script>{% endblock %}

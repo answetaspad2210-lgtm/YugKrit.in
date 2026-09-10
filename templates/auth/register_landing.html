@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Join YugKrit{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card wide">
+    <div class="auth-logo">
+      <img src="{{ url_for('static', filename='images/yugkrit-logo.png') }}" alt="YugKrit logo" class="auth-logo-image">
+      <h2 style="margin-top:10px;">Join YugKrit</h2>
+      <p style="color:var(--ink-500);font-size:14px;">Choose how you'd like to participate</p>
+    </div>
+
+    <div class="role-select-grid">
+      <div class="role-select-card">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <h4>University</h4>
+        <p>Register your institution to access verified challenges.</p>
+        <a href="{{ url_for('auth.register_university') }}" class="btn btn-primary btn-sm btn-block">Register</a>
+      </div>
+      <div class="role-select-card">
+        <i class="fa-solid fa-industry"></i>
+        <h4>Industry / Organization</h4>
+        <p>Offer mentorship, technology, resources, funding, and pilot support.</p>
+        <a href="{{ url_for('industry.register') }}" class="btn btn-primary btn-sm btn-block">Register</a>
+      </div>
+      <div class="role-select-card">
+        <i class="fa-solid fa-city"></i>
+        <h4>ULB / NGO</h4>
+        <p>Submit municipal or community problems for solving — one shared dashboard.</p>
+        <a href="{{ url_for('auth.register_ulb') }}" class="btn btn-primary btn-sm btn-block">Register</a>
+      </div>
+      <div class="role-select-card">
+        <i class="fa-solid fa-user-graduate"></i>
+        <h4>Student</h4>
+        <p>Join a project team or start your own innovation journey.</p>
+        <a href="{{ url_for('auth.register_student') }}" class="btn btn-primary btn-sm btn-block">Register</a>
+      </div>
+      <div class="role-select-card">
+        <i class="fa-solid fa-id-card"></i>
+        <h4>Citizen</h4>
+        <p>Verify your phone to post and track real problems in your area.</p>
+        <a href="{{ url_for('auth.register_citizen') }}" class="btn btn-primary btn-sm btn-block">Register</a>
+      </div>
+      <div class="role-select-card staff-card">
+        <i class="fa-solid fa-building-shield"></i>
+        <div class="staff-card-body">
+          <h4>Government IT Cell <span class="staff-badge">Staff</span></h4>
+          <p>Ministry-level oversight — monitors and approves every organization, university,
+            student and citizen on the platform. Accounts are provisioned by the platform
+            administrator, not self-registered.</p>
+        </div>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-accent btn-sm">Staff Login</a>
+      </div>
+    </div>
+
+    <div class="auth-links">
+      Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a><br><br>
+      Government (departmental) users are also onboarded directly by the platform administrator.
+    </div>
+  </div>
+</div>
+{% endblock %}

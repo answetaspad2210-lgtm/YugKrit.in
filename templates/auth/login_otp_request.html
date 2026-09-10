@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Login with OTP — {{ app_name }}{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <i class="fa-solid fa-mobile-screen-button" style="font-size:30px;color:var(--color-primary);"></i>
+      <h2 style="margin-top:10px;">Login with OTP</h2>
+      <p style="color:var(--ink-500);font-size:14px;">We'll send a 6-digit code to your registered WhatsApp number.</p>
+    </div>
+
+    <div class="login-mode-tabs">
+      <a href="{{ url_for('auth.login') }}" class="login-mode-tab">Password</a>
+      <span class="login-mode-tab active">Phone + OTP</span>
+    </div>
+
+    {% if otp_dev_mode %}<div class="demo-banner">
+      <strong>Dev-mode notice:</strong> no real WhatsApp provider is configured. The OTP will be
+      shown directly on the next screen so you can test the flow locally.
+    </div>{% endif %}
+
+    <form method="post">
+      <div class="form-group">
+        <label>Registered WhatsApp Number</label>
+        <input type="tel" name="phone" required placeholder="+919876543210" autocomplete="tel" autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg"><i class="fa-brands fa-whatsapp"></i> Send OTP on WhatsApp</button>
+    </form>
+
+    <div class="auth-links">
+      Prefer email and password? <a href="{{ url_for('auth.login') }}">Log in that way</a><br><br>
+      Don't have an account? <a href="{{ url_for('auth.register_landing') }}">Join YugKrit</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

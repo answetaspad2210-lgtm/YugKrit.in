@@ -1,0 +1,27 @@
+{% extends "citizen/_base.html" %}
+{% block title %}{{ challenge.title }} — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="breadcrumbs"><a href="{{ url_for('citizen.problems') }}">Browse Problems</a> / {{ challenge.challenge_code }}</div>
+<div class="page-header">
+  <div><h1>{{ challenge.title }}</h1><p>{{ challenge.category.name if challenge.category else '—' }}</p></div>
+  <span class="badge {{ 'badge-danger' if challenge.priority_score>=70 else 'badge-warning' }}" style="font-size:14px;padding:8px 16px;">Priority {{ challenge.priority_score }}/100</span>
+</div>
+
+<div class="card card-body">
+  <h3>Description</h3>
+  <p>{{ challenge.description }}</p>
+  <div class="detail-list">
+    <div class="row"><span class="label">Affected Population</span><span class="value">{{ challenge.affected_population }}</span></div>
+    <div class="row"><span class="label">Location</span><span class="value">{{ challenge.location.district if challenge.location else '—' }}, {{ challenge.location.state if challenge.location else '' }}</span></div>
+    <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-neutral">{{ challenge.status }}</span></span></div>
+    <div class="row"><span class="label">Posted By</span><span class="value">{{ challenge.submitter_name() }}</span></div>
+    <div class="row"><span class="label">Assigned University</span><span class="value">{{ challenge.assigned_university.organization.name if challenge.assigned_university else 'Not yet assigned' }}</span></div>
+  </div>
+
+  {% if challenge.location and challenge.location.latitude %}
+  <h3 style="margin-top:20px;">Location</h3>
+  <div id="challenge-map" class="map-container small"
+    data-locations='[{"title": {{ challenge.title|tojson }}, "lat": {{ challenge.location.latitude }}, "lng": {{ challenge.location.longitude }}, "priority": {{ challenge.priority_score }}, "status": {{ challenge.status|tojson }}}]'></div>
+  {% endif %}
+</div>
+{% endblock %}

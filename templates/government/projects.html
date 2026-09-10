@@ -1,0 +1,26 @@
+{% extends "government/_base.html" %}
+{% block title %}Projects — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Projects</h1><p>All university-led projects executing verified challenges.</p></div></div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Project</th><th>Challenge</th><th>University</th><th>Status</th><th>Progress</th></tr></thead>
+      <tbody>
+        {% for p in projects %}
+        <tr>
+          <td data-label="Project" class="row-title">{{ p.name }}<br><small style="color:var(--ink-500);">{{ p.project_code }}</small></td>
+          <td data-label="Challenge">{{ p.challenge.title }}</td>
+          <td data-label="University">{{ p.university.organization.name }}</td>
+          <td data-label="Status"><span class="badge {{ 'badge-success' if p.status in ['COMPLETED','VERIFIED'] else 'badge-neutral' }}">{{ p.status }}</span></td>
+          <td data-label="Progress">
+            <div class="progress-bar-track"><div class="progress-bar-fill" style="width:{{ p.testing_progress }}%;"></div></div>
+          </td>
+        </tr>
+        {% else %}<tr><td colspan="5">No projects yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

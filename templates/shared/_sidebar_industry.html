@@ -1,0 +1,7 @@
+<a href="{{ url_for('industry.dashboard') }}" class="{{ 'active' if request.endpoint=='industry.dashboard' }}"><i class="fa-solid fa-gauge"></i> Overview</a>
+<a href="{{ url_for('industry.recommendations') }}" class="{{ 'active' if request.endpoint=='industry.recommendations' }}"><i class="fa-solid fa-compass"></i> Recommended Challenges</a>
+<a href="{{ url_for('industry.projects') }}" class="{{ 'active' if request.endpoint=='industry.projects' }}"><i class="fa-solid fa-diagram-project"></i> Collaborations</a>
+<a href="{{ url_for('industry.mentors') }}" class="{{ 'active' if request.endpoint=='industry.mentors' }}"><i class="fa-solid fa-user-tie"></i> Mentors</a>
+<a href="{{ url_for('industry.funding') }}" class="{{ 'active' if request.endpoint=='industry.funding' }}"><i class="fa-solid fa-hand-holding-dollar"></i> Funding / CSR</a>
+<a href="{{ url_for('industry.profile') }}" class="{{ 'active' if request.endpoint=='industry.profile' }}"><i class="fa-solid fa-building"></i> Organization Profile</a>
+<a href="{{ url_for('notifications.list_notifications') }}" class="{{ 'active' if request.endpoint=='notifications.list_notifications' }}"><i class="fa-solid fa-bell"></i> Notifications</a>

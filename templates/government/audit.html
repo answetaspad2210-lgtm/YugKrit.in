@@ -1,0 +1,27 @@
+{% extends "government/_base.html" %}
+{% block title %}Audit Trail — {{ app_name }}{% endblock %}
+{% block dashboard_content %}
+<div class="page-header"><div><h1>Audit Trail</h1><p>Immutable record of every significant platform action.</p></div></div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Timestamp</th><th>Role</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead>
+      <tbody>
+        {% for l in logs %}
+        <tr>
+          <td data-label="Timestamp">{{ l.timestamp.strftime('%d %b %Y, %I:%M %p') }}</td>
+          <td data-label="Role"><span class="badge badge-neutral">{{ l.role_name }}</span></td>
+          <td data-label="Action" class="row-title">{{ l.action }}</td>
+          <td data-label="Entity">{{ l.entity }} #{{ l.entity_id }}</td>
+          <td data-label="Details">
+            {% if l.previous_value or l.new_value %}{{ l.previous_value }} → {{ l.new_value }}{% endif %}
+            {% if l.reason %}<br><span style="color:var(--ink-500);">{{ l.reason }}</span>{% endif %}
+          </td>
+        </tr>
+        {% else %}<tr><td colspan="5">No audit records yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
